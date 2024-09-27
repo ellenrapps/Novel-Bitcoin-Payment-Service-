@@ -1,4 +1,4 @@
-# Copyright © 2024 Ellen Red. All rights reserved.
+# Copyright © 2024 Ellen Red
 
 import decimal
 import requests
