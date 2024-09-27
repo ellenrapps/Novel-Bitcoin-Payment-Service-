@@ -1,5 +1,4 @@
-# Novel-Bitcoin-Payment-Service-
-Novel Bitcoin Payment System using Bitcoin's in-built communication system and smart contracts. This is a work in progress. 
+# Novel-Bitcoin-Payment-Service
 
 Bitcoin Payment Service aims to be your very own payment service -- attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto.
 
