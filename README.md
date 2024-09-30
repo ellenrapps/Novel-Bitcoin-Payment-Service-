@@ -1,5 +1,8 @@
 # Novel-Bitcoin-Payment-Service
 
+Join the conversation about this Novel Bitcoin Payment Service on bitcointalk.
+Link: https://bitcointalk.org/index.php?topic=5510774.0
+
 Bitcoin Payment Service aims to be your very own payment service -- attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto.
 
 In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as allowing  "online payments to be sent directly from one party to another without going through a financial institution".
