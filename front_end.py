@@ -39,26 +39,26 @@ class Home:
         self.support_button.pack(padx=10, in_=top, side='left')
 
         # SingleSig Address
-        self.label_step1 = tk.Label(self.root, text="Step 1: Create a single signature taproot bitcoin address or create a bitcoin smart contract. Warning! Address and contract details will self-destruct in 8 seconds.", bg='#0f3d0f', fg="white", font=("Segoe", 9))
+        self.label_step1 = tk.Label(self.root, text="Step 1: Create a single signature taproot bitcoin address or create a bitcoin smart contract. Warning! Address and contract details will self-destruct in 5 seconds.", bg='#0f3d0f', fg="white", font=("Segoe", 9))
         self.label_step1.pack(pady=10)
         self.key_button = tk.Button(self.root, text= "Create a Single Signature Taproot Bitcoin Address", bg="gray", height=1, width=40, font=("Arial", 10, 'bold'), command=self.show_delete_keyadd)
         self.key_button.bind("<Enter>", lambda event, h=self.key_button: h.configure(bg="white"))
         self.key_button.bind("<Leave>", lambda event, h=self.key_button: h.configure(bg="gray"))
         self.key_button.pack()
-        self.text_key_address = tk.Text(self.root, bg='#8fbc8f', height=2, width=90, fg="black", font=("Arial", 11))
+        self.text_key_address = tk.Text(self.root, bg='#8fbc8f', height=2, width=150, fg="black", font=("Arial", 9))
         self.text_key_address.bind("<Button-1>", self.disable_click_master)
         self.text_key_address.bind("<Key>", lambda e: "break")
         self.text_key_address.bind("<Key>", lambda e: self.copy(e))
         self.text_key_address.pack()
 
         # Smart Contract
-        self.contract_button = tk.Button(self.root, text= "Create a Bitcoin Smart Contract", bg="gray", height=1, width=40, font=("Arial", 10, 'bold'), command=self.contract_window)
+        self.contract_button = tk.Button(self.root, text= "Create Bitcoin Smart Contract (Disabled)", bg="gray", height=1, width=40, font=("Arial", 10, 'bold'))
         self.contract_button.bind("<Enter>", lambda event, h=self.contract_button: h.configure(bg="white"))
         self.contract_button.bind("<Leave>", lambda event, h=self.contract_button: h.configure(bg="gray"))
         self.contract_button.pack(pady=10)
 
         # Send Bitcoin
-        self.label_send = tk.Label(self.root, text="Step 2: Send bitcoin. Warning! Check multiple times entries made. Wrong entry could mean sending bitcoin to wrong person. ", bg='#0f3d0f', fg="white", font=("Segoe", 9))
+        self.label_send = tk.Label(self.root, text="Step 2: Send bitcoin. Warning! Check multiple times entries made. Wrong entry could mean sending bitcoin to wrong person. \nThis Bitcoin Payment Service self-destructs all users' data and has no memory of users' data.", bg='#0f3d0f', fg="white", font=("Segoe", 9))
         self.label_send.pack(pady=5)
         self.frame = tk.Frame(self.root, bg='#8fbc8f')
         self.frame.pack()
@@ -189,7 +189,7 @@ class Home:
         self.v = tk.Scrollbar(self.win_faq, orient='vertical')
         self.v.pack(side='right', fill='y')        
         self.text_faq = tk.Text(self.win_faq, wrap=WORD, width=115, height=32, font=("Arial", 11), yscrollcommand=self.v.set, )
-        self.text_faq.insert(tk.END, 'Support This Bitcoin Payment Service\n\nSupport this endeavor through Github Sponsor program or via bitcoin donation:\n3BfxW1jEHK572XVG7NG62WM4By6fF8P8Yh\nor\nbc1p63fyummqja06a3gyvw6r4khw8puw02p7fxd5wyysmgnmsm47cz0sa363pj\n\nGithub Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-')  
+        self.text_faq.insert(tk.END, 'Support This Bitcoin Payment Service\n\nSupport this endeavor via bitcoin donation:\n3PBQZaxNh1U5pmKQ3zSboVfSedTJ5jYdBs\nor\nbc1p63fyummqja06a3gyvw6r4khw8puw02p7fxd5wyysmgnmsm47cz0sa363pj')  
         self.text_faq.config(state=tk.DISABLED)
         self.text_faq.pack(padx=5, pady=5)
 
@@ -214,14 +214,14 @@ class Home:
     
 
     def key_address(self): 
-        tweak_pri, tweak_pub, addr = master.iden()
-        self.content_key_address = f'New Bitcoin Address: {addr} \nNew Bitcoin Private Key: {tweak_pri}\n' 
+        addr, tweak_pri_hex, tweak_pri_codec, tweak_pubx_hex = master.iden()
+        self.content_key_address = f'Bitcoin Address: {addr} \nObfuscated Private Key: {tweak_pri_codec}\n' 
         return self.content_key_address 
 
     
     def key_dis_but(self, button, delay):
         self.key_button.config(state='disabled')
-        self.root.after(delay*2600, self.key_enab_but)
+        self.root.after(delay*1500, self.key_enab_but)
 
 
     def key_enab_but(self):
@@ -238,28 +238,10 @@ class Home:
         self.text_key_address.tag_configure("center", justify='center')  
         self.text_key_address.insert(tk.INSERT, self.key_add)
         self.text_key_address.tag_add("center", "1.0", "end")
-        self.text_key_address.after(8000, self.delete_keyadd)    
+        self.text_key_address.after(5000, self.delete_keyadd)    
         self.key_button.update()
 
-
-    # Def Smart Contract
-    def contract_window(self):
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
-        self.win_faq = tk.Toplevel(self.root)
-        self.win_width = 1000 
-        self.win_height = 600
-        self.x = (self.screen_width // 2) - (self.win_width // 2)
-        self.y = (self.screen_height // 2) - (self.win_height // 2)
-        self.win_faq.geometry(f"{self.win_width}x{self.win_height}+{self.x}+{self.y}")
-        self.v = tk.Scrollbar(self.win_faq, orient='vertical')
-        self.v.pack(side='right', fill='y')        
-        self.text_contract = tk.Text(self.win_faq, wrap=WORD, width=115, height=32, font=("Arial", 11), yscrollcommand=self.v.set, )
-        self.text_contract.insert(tk.END, 'Bitcoin Smart Contract is not yet enabled.')  
-        self.text_contract.config(state=tk.DISABLED)
-        self.text_contract.pack(padx=5, pady=5)
-    
-    
+       
     # Def Send
     def disable_click_send(self, event):
         if not self.text_send.get("1.0", "end-1c"): 
@@ -361,4 +343,3 @@ if __name__ == '__main__':
     app = Home(root)
     root.mainloop()
     
-
