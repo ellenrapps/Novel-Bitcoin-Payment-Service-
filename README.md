@@ -1,9 +1,9 @@
 # Novel Bitcoin Payment Service
 
-# Frequently Asked Questions (FAQ)
+**Frequently Asked Questions (FAQ)**
 
 
-##What is this project all about?
+**What is this project all about?**
 
 Novel Bitcoin Payment Service aims to be your very own payment service -- attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto. In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as allowing "online payments to be sent directly from one party to another without going through a financial institution".
 
