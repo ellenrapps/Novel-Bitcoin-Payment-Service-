@@ -3,7 +3,7 @@
 Frequently Asked Questions(FAQ)
 
 
- “**What is this project all about?**”
+ **What is this project all about?**
 
 Novel Bitcoin Payment Service aims to be your very own payment service -- attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto. In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as allowing "online payments to be sent directly from one party to another without going through a financial institution".
 
@@ -19,13 +19,13 @@ This payment service doesn't aim to be a financial institution. Rather, this pay
 
 
 
-“**What is the nature of the project output?**”
+**What is the nature of the project output?**
 
 The output of this project is an app that will only be available in Linux and Windows devices. There is no plan for a web or smartphone version. This app is non-custodial so users have full control of their funds. This app earns nothing.
 
 
 
-“**What are the project's milestones?**”
+**What are the project's milestones?**
 
 September 2024:
 - Activate the app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
@@ -49,7 +49,7 @@ April 2025 and beyond:
 
 
 
-“**Who is the main developer of this project?**”
+**Who is the main developer of this project?**
 
 Currently, I'm the only one working on this project. For almost a decade, I have worked as a hardware and software developer. Some of my software programs are now available to the public via:
 
@@ -59,7 +59,7 @@ Microsoft Store (visit Microsoft Store and look for these apps: VidRecorder, Spe
 
 
 
-“**If you financially support this project where will the funds go?**”
+**If you financially support this project where will the funds go?**
 
 Your hard-earned financial assistance will go to the development and maintenance of this app. This Bitcoin Payment Service is a work in progress. Support this endeavor through:
 
