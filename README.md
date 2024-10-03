@@ -50,6 +50,7 @@ Microsoft Store (visit Microsoft Store and look for these apps: VidRecorder, Spe
 
 If you financially support this project where will the funds go?
 Your hard-earned financial assistance will go to the development and maintenance of this app. This Bitcoin Payment Service is a work in progress. Support this endeavor through:
+
 Github's Sponsor program: https://github.com/sponsors/ellenrapps
 
 Bitcoin donation:
