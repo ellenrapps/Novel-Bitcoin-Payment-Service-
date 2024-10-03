@@ -21,6 +21,7 @@ The output of this project is an app that will only be available in Linux and Wi
 
 
 What are the project's milestones?
+
 September 2024:
 - Activate the app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
 - Activate the create taproot single signature address, key-pair button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
