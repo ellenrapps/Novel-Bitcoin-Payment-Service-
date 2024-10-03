@@ -53,6 +53,7 @@ Your hard-earned financial assistance will go to the development and maintenance
 Github's Sponsor program: https://github.com/sponsors/ellenrapps
 
 Bitcoin donation:
+
 3PBQZaxNh1U5pmKQ3zSboVfSedTJ5jYdBs
 
 or
