@@ -45,7 +45,9 @@ April 2025 and beyond:
 
 Who is the main developer of this project?
 Currently, I'm the only one working on this project. For almost a decade, I have worked as a hardware and software developer. Some of my software programs are now available to the public via:
+
 GitHub: https://github.com/ellenrapps
+
 Microsoft Store (visit Microsoft Store and look for these apps: VidRecorder, SpellCheckUp, RecordAudio: https://apps.microsoft.com/search/publisher?name=Ellen+Red&hl=en-us&gl=US
 
 
