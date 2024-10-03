@@ -2,6 +2,7 @@
 
 Frequently Asked Questions(FAQ)
 
+
 What is this project all about?
 
 Novel Bitcoin Payment Service aims to be your very own payment service -- attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto. In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as allowing "online payments to be sent directly from one party to another without going through a financial institution".
@@ -17,9 +18,11 @@ This payment service doesn't aim to be a financial institution. Rather, this pay
 6. Allow transaction parties (sender and receiver) to communicate with each other using Bitcoin's in-built messaging system
 
 
+
 What is the nature of the project output?
 
 The output of this project is an app that will only be available in Linux and Windows devices. There is no plan for a web or smartphone version. This app is non-custodial so users have full control of their funds. This app earns nothing.
+
 
 
 What are the project's milestones?
@@ -45,6 +48,7 @@ April 2025 and beyond:
 - Maintain/improve the security and smooth operation of the app
 
 
+
 Who is the main developer of this project?
 
 Currently, I'm the only one working on this project. For almost a decade, I have worked as a hardware and software developer. Some of my software programs are now available to the public via:
@@ -52,6 +56,7 @@ Currently, I'm the only one working on this project. For almost a decade, I have
 GitHub: https://github.com/ellenrapps
 
 Microsoft Store (visit Microsoft Store and look for these apps: VidRecorder, SpellCheckUp, RecordAudio: https://apps.microsoft.com/search/publisher?name=Ellen+Red&hl=en-us&gl=US
+
 
 
 If you financially support this project where will the funds go?
