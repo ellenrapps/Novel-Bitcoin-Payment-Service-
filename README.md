@@ -21,7 +21,7 @@ This payment service doesn't aim to be a financial institution. Rather, this pay
 
 **What is the nature of the project output?**
 
-The output of this project is an app that will only be available on Linux desktop computer. No plan for Windows, web, and smartphone versions. This app is non-custodial so users have full control of their funds. This app earns nothing.
+The output of this project is an app that will only be available on Linux desktop computers. This app is non-custodial so users have full control of their funds. This app earns nothing.
 
 
 **What are the project's milestones?**
