@@ -11,7 +11,7 @@ Unknown to many, Bitcoin has an in-built infrastructure for senders and receiver
 
 This payment service doesn't aim to be a financial institution. Rather, this payment service aims to be a means for ordinary folks to send bitcoin to one another without an intermediary financial institution. Specifically, this payment service allows ordinary folks to:
 1. Create bitcoin addresses
-2. Create smart contracts using Bitcoin's in-built infrastructure (including an escrow system without third party)
+2. Create smart contracts using Bitcoin's in-built infrastructure (including but not limited to an escrow system without third party)
 3. Check bitcoin address balance using an in-built blockchain explorer
 4. Receive bitcoin
 5. Send bitcoin
