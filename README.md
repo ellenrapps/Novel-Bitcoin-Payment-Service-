@@ -1,11 +1,11 @@
 # Novel Bitcoin Payment Service
 
-**Frequently Asked Questions (FAQ)**
+**Frequently Asked Questions (FAQs)**
 
 
-**What is this project all about?**
+**What is the purpose of this project?**
 
-Novel Bitcoin Payment Service aims to be your very own payment service -- attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto. In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as allowing "online payments to be sent directly from one party to another without going through a financial institution".
+Novel Bitcoin Payment Service aims to be your very own payment service, attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto. In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as enabling "online payments to be sent directly from one party to another without going through a financial institution".
 
 Unknown to many, Bitcoin has an in-built infrastructure for senders and receivers to communicate with each other. Bitcoin also has an in-built infrastructure for smart contracts. These in-built messaging system and smart contracts within the Bitcoin blockchain will be put into use in this Novel Bitcoin Payment Service.
 
@@ -19,38 +19,38 @@ This payment service doesn't aim to be a financial institution. Rather, this pay
 
 
 
-**What is the nature of the project output?**
+**What outputs can we expect from it?**
 
-The output of this project is an app that will only be available on Linux desktop computers. This app is non-custodial so users have full control of their funds. This app earns nothing.
+The project will produce an app for Linux and Windows desktops. This app is non-custodial, giving users full control of their funds. The app does not generate any earnings.
 
 
-**What are the project's milestones?**
+**What are the key milestones for this project?**
 
 September 2024:
 - Activate the app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
 - Activate the create taproot single signature address, key-pair button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
 - Activate the check bitcoin address balance button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
 
-November 2024:
+December 2024:
 - Activate the app's in-built blockchain explorer
 
-January 2025:
+February 2025:
 - Activate the app's smart contract creation button using Bitcoin's in-built infrastructure
 
-March 2025:
+April 2025:
 - Activate the app's messaging system using Bitcoin's in-built infrastructure
 
-April 2025:
+May 2025:
 - Official launching of the Novel Bitcoin Payment Service - Mainnet
 
-April 2025 and beyond:
+May 2025 and beyond:
 - Maintain/improve the security and smooth operation of the app
 
 
 
-**Who is the main developer of this project?**
+**Who is the lead developer?**
 
-Currently, I'm the only one working on this project. For almost a decade, I have worked as a hardware and software developer. Some of my software programs are now available to the public via:
+Currently, I'm the only one working on this project. I have worked as a software developer for nearly a decade. Some of my software programs are now available to the public via:
 
 GitHub: https://github.com/ellenrapps
 
@@ -58,9 +58,9 @@ Microsoft Store (visit Microsoft Store and look for these apps: VidRecorder, Spe
 
 
 
-**If you financially support this project where will the funds go?**
+**If you support this project financially, how will the funds be utilized?**
 
-Your hard-earned financial assistance will go to the development and maintenance of this app. This Bitcoin Payment Service is a work in progress. Support this endeavor through:
+Your financial contributions will help develop and maintain this app. This Bitcoin Payment Service is a work in progress. Support this endeavor through:
 
 Github's Sponsor program: https://github.com/sponsors/ellenrapps
 
