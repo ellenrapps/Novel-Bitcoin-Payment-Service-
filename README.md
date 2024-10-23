@@ -50,7 +50,7 @@ May 2025 and beyond:
 
 **Who is the lead developer?**
 
-Currently, I'm the only one working on this project. I have worked as a software developer for nearly a decade. Some of my software programs are now available to the public via:
+Currently, I'm the only one working on this project.  I have been working as a software developer for nearly a decade. Some of my software programs are now available to the public via:
 
 GitHub: https://github.com/ellenrapps
 
