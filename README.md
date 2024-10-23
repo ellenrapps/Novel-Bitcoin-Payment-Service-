@@ -37,9 +37,6 @@ September 2024:
 - Activate the app's messaging system using Bitcoin's in-built infrastructure
 - Official launching of the Novel Bitcoin Payment Service - Mainnet
 
-May 2025 and beyond:
-- Maintain/improve the security and smooth operation of the app
-
 
 
 **Who is the lead developer?**
