@@ -31,16 +31,10 @@ September 2024:
 - Activate the create taproot single signature address, key-pair button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
 - Activate the check bitcoin address balance button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
 
-December 2024:
+2025:
 - Activate the app's in-built blockchain explorer
-
-February 2025:
 - Activate the app's smart contract creation button using Bitcoin's in-built infrastructure
-
-April 2025:
 - Activate the app's messaging system using Bitcoin's in-built infrastructure
-
-May 2025:
 - Official launching of the Novel Bitcoin Payment Service - Mainnet
 
 May 2025 and beyond:
