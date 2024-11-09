@@ -335,7 +335,7 @@ class Home:
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.title('Bitcoin Payment Service - Testnet Version. AGPL-3.0 License. Copyright © 2024 Ellen Red. All rights reserved.')
+    root.title('Novel Bitcoin Payment Service - Testnet Version. AGPL-3.0 License.')
     root.state('zoomed')
     root.config(bg='#8fbc8f')
     top = tk.Frame(root)
