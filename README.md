@@ -44,9 +44,13 @@ The following are some of my completed personal projects:
 * RecordAudio (https://apps.microsoft.com/detail/9mvvhxfhzp8x?hl=en-us&gl=US)
 
 Website: https://ellenrapps.com/
+
 GitHub: https://github.com/ellenrapps
+
 YouTube: https://www.youtube.com/@ellenrapps
+
 X.com: https://x.com/ellenrapps
+
 Email: jetravellingATgmailDOTcom
 
 If you find this project beneficial to the bitcoin community, support this endeavor via bitcoin donation:
