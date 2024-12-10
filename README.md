@@ -18,30 +18,30 @@ Novel Bitcoin Payment Service aims to be one's very own payment service, attaini
 **Project Timelines and Potential Milestones:**
 The following are the key milestones for this project:
 September 2024:
-. Partial activation of the app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
-. Complete activation of the create taproot single signature address, key-pair button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
-. Complete activation of the check bitcoin address balance button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
+* Partial activation of the app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
+* Complete activation of the create taproot single signature address, key-pair button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
+* Complete activation of the check bitcoin address balance button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
 
 To be completed 365 days starting from the date the necessary grant money is received:
-- Full implementation of the Bitcoin Protocol in a language that scales up Bitcoin
-. Complete activation of the app's in-built blockchain explorer
-. Complete activation of the escrow and inheritance smart contracts using Bitcoin's in-built infrastucture
-. Complete activation of the app's messaging system using Bitcoin's in-built infrastructure
-. Official launching of the Novel Bitcoin Payment Service - Mainnet
+* Full implementation of the Bitcoin Protocol in a language that scales up Bitcoin
+* Complete activation of the app's in-built blockchain explorer
+* Complete activation of the escrow and inheritance smart contracts using Bitcoin's in-built infrastucture
+* Complete activation of the app's messaging system using Bitcoin's in-built infrastructure
+* Official launching of the Novel Bitcoin Payment Service - Mainnet
 
 **About the Project Lead/Lead Contributor:**
 I have nearly a decade of experience as a software developer. I began publishing my software programs almost half a decade ago, and some of my software programs are now available to the public through Microsoft Store and GitHub.
 
 The following are my ongoing personal projects:
-Novel Bitcoin Payment Service (https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-)
-Woobu Autonomous Drone (https://github.com/ellenrapps/Woobu-Autonomous-Drone)
+* Novel Bitcoin Payment Service (https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-)
+* Woobu Autonomous Drone (https://github.com/ellenrapps/Woobu-Autonomous-Drone)
 
 The following are some of my completed personal projects:
-Road to Autonomous Drone Using Raspberry Pi Pico (https://github.com/ellenrapps/Road-to-Autonomous-Drone-Using-Raspberry-Pi-Pico#road-to-autonomous-drone-using-raspberry-pi-pico)
-Woobu GPS Tracker (https://github.com/ellenrapps/Woobu-GPS-Tracker)
-GPS Coordinates Finder Using Raspberry Pi Pico and Ublox Neo 6m GPS Module (https://github.com/ellenrapps/GPS-Coordinates-Finder-Using-Raspberry-Pi-Pico-and-Ublox-Neo-6m-GPS-Module)
-VidRecorder (https://apps.microsoft.com/detail/9ng8tndb5dh0?hl=en-us&gl=US)
-RecordAudio (https://apps.microsoft.com/detail/9mvvhxfhzp8x?hl=en-us&gl=US)
+* Road to Autonomous Drone Using Raspberry Pi Pico (https://github.com/ellenrapps/Road-to-Autonomous-Drone-Using-Raspberry-Pi-Pico#road-to-autonomous-drone-using-raspberry-pi-pico)
+* Woobu GPS Tracker (https://github.com/ellenrapps/Woobu-GPS-Tracker)
+* GPS Coordinates Finder Using Raspberry Pi Pico and Ublox Neo 6m GPS Module (https://github.com/ellenrapps/GPS-Coordinates-Finder-Using-Raspberry-Pi-Pico-and-Ublox-Neo-6m-GPS-Module)
+* VidRecorder (https://apps.microsoft.com/detail/9ng8tndb5dh0?hl=en-us&gl=US)
+* RecordAudio (https://apps.microsoft.com/detail/9mvvhxfhzp8x?hl=en-us&gl=US)
 
 Website: https://ellenrapps.com/
 GitHub: https://github.com/ellenrapps
