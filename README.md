@@ -1,10 +1,7 @@
-Project Name:
+**Project Name:**
 Novel Bitcoin Payment Service
 
-Project GitHub:
-https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-
-
-Project Description:
+**Project Description:**
 Unknown to many, Bitcoin has an in-built infrastructure for senders and receivers to communicate with each other. Bitcoin also has an in-built infrastructure for smart contracts. These in-built messaging system and smart contracts within the Bitcoin infrastructure will be put into use in this Novel Bitcoin Payment Service. Specifically, this payment service allows ordinary folks to:
 1. Create bitcoin addresses
 2. Create smart contracts using Bitcoin's in-built infrastructure (including but not limited to escrow and inheritance smart contracts without third party)
@@ -15,10 +12,10 @@ Unknown to many, Bitcoin has an in-built infrastructure for senders and receiver
 
 The project will produce an app for Linux and Windows desktops. This app is non-custodial, giving users full control of their funds. Grant funding is necessary as there is no way to repay generous donors as the app is free, does not generate any earnings, and open source. The app is a proof of concept.
 
-Potential Impact to the Bitcoin Community:
+**Potential Impact to the Bitcoin Community:**
 Novel Bitcoin Payment Service aims to be one's very own payment service, attaining the goal of "Peer-to-Peer Electronic Cash System" as envisioned by Satoshi Nakamoto. In Nakamoto's Bitcoin white paper, Peer-to-Peer Electronic Cash System is described as enabling "online payments to be sent directly from one party to another without going through a financial institution". This payment service does not aim to be a financial institution. Rather, this payment service aims to be a means for ordinary folks to send bitcoin to one another without an intermediary financial institution.
 
-Project Timelines and Potential Milestones:
+**Project Timelines and Potential Milestones:**
 The following are the key milestones for this project:
 September 2024:
 . Partial activation of the app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
@@ -32,7 +29,7 @@ To be completed 365 days starting from the date the necessary grant money is rec
 . Complete activation of the app's messaging system using Bitcoin's in-built infrastructure
 . Official launching of the Novel Bitcoin Payment Service - Mainnet
 
-About the Project Lead/Lead Contributor:
+**About the Project Lead/Lead Contributor:**
 I have nearly a decade of experience as a software developer. I began publishing my software programs almost half a decade ago, and some of my software programs are now available to the public through Microsoft Store and GitHub.
 
 The following are my ongoing personal projects:
