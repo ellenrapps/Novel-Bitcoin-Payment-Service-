@@ -23,7 +23,7 @@ September 2024:
 * Complete activation of the check bitcoin address balance button -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/front_end.py
 
 To be completed 365 days starting from the date the necessary grant money is received:
-* Full implementation of the Bitcoin Protocol in a language that scales up Bitcoin
+* Full implementation of the Bitcoin Protocol in languages that scale up Bitcoin
 * Complete activation of the app's in-built blockchain explorer
 * Complete activation of the escrow and inheritance smart contracts using Bitcoin's in-built infrastucture
 * Complete activation of the app's messaging system using Bitcoin's in-built infrastructure
