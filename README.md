@@ -52,7 +52,7 @@ The following are the key milestones for this project:
 
 **Project Status: Discontinued**
 
-A project of this scale needs funding. Even after months of actively looking for grant funding, as this project earns no money, this project has received zero financial support. This project in its current state will no longer be pursued or discontinued.
+A project of this scale needs funding. Even after months of actively looking for grant funding, as this project earns no money, this project has received zero financial support. This project in its current state will no longer be pursued. Project status: Discontinued.
 
 Thank you for your interest.
 
