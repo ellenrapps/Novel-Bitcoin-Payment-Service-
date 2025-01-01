@@ -33,6 +33,7 @@ The following are the key milestones for this project:
 
 
 **Potential Milestones:**
+
 . Full implementation of the Bitcoin Protocol in languages that scale up Bitcoin
 
 . Complete activation of the app's in-built blockchain explorer
