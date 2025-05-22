@@ -46,6 +46,7 @@ The following are the key milestones for this project:
 
 **Project Status: Ongoing**
 
-If you find this project beneficial to the bitcoin community, please support this project.
+If you find this project beneficial to the Bitcoin Community, please support this project.
+
 Ellen Red
 Project Lead/Lead Developer
