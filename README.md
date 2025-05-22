@@ -44,13 +44,8 @@ The following are the key milestones for this project:
 
 . Official launching of the Novel Bitcoin Payment Service - Mainnet
 
+**Project Status: Ongoing**
 
-
-**Project Status: Discontinued**
-
-A project of this scale needs funding. Even after months of actively looking for grant funding, as this project earns no money, this project has received zero financial support. This project in its current state will no longer be pursued. Project status: Discontinued.
-
-Thank you for your interest.
-
+If you find this project beneficial to the bitcoin community, please support this project.
 Ellen Red
 Project Lead/Lead Developer
