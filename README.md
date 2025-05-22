@@ -51,5 +51,5 @@ If you find this project beneficial to the Bitcoin Community, please support thi
 Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
 
 
-Ellen Red
+Ellen Red, 
 Project Lead/Lead Developer
