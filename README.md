@@ -32,7 +32,7 @@ The following are the key milestones for this project:
 
 
 
-**Potential Milestones:**
+**Future Milestones:**
 
 . Full implementation of the Bitcoin Protocol in languages that scale up Bitcoin
 
