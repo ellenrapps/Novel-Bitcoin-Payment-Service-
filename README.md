@@ -12,8 +12,7 @@ Unknown to many, Bitcoin has an in-built infrastructure for senders and receiver
 5. Send bitcoin
 6. Allow transaction parties (sender and receiver) to communicate with each other using Bitcoin's in-built messaging system
 
-The project will produce an app for Linux and Windows desktops. This app is non-custodial, giving users full control of their funds. Grant funding is necessary as there is no way to repay generous donors as the app is free, does not generate any earnings, and open source. The app is a proof of concept.
-
+This project will produce an app for Linux and Windows desktops. This app is non-custodial, giving users full control of their funds. This project relies on sponsorship as the app is free, does not generate any earnings, and open source.
 
 
 **Potential Impact to the Bitcoin Community:**
