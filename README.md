@@ -1,7 +1,5 @@
 **Project Status: Ongoing**
 
-Code update is coming soon.
-
 Novel Bitcoin Payment Service aims to be your very own Bitcoin payment service. Novel's current public code on GitHub allows users to create new Bitcoin addresses. The code also allows users to verify the current balance associated with a Bitcoin address. This is a proof of concept. Bitcoin Testnet version is used here. 
 
 If you find this project beneficial, please support this project.
