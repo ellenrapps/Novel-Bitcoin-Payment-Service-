@@ -13,6 +13,7 @@ Ellen Red,
 Project Lead/Lead Developer
 
 ####################################
+
 **Project Description:**
 Unknown to many, Bitcoin has an in-built infrastructure for senders and receivers to communicate with each other. Bitcoin also has an in-built infrastructure for smart contracts. These in-built messaging system and smart contracts within the Bitcoin infrastructure will be put into use in this Novel Bitcoin Payment Service. Specifically, this payment service allows ordinary folks to:
 1. Create bitcoin addresses
