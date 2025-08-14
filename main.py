@@ -1,3 +1,5 @@
+# AGPL-3.0 License. Copyright © 2025 Ellen Red. All rights reserved.
+
 import tkinter as tk
 from tkinter import WORD
 import master
