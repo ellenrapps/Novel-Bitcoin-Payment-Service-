@@ -14,7 +14,7 @@ Specifically, this payment service will allow ordinary folks to:
 5. Send bitcoin 
 6. Communicate regarding the received or sent bitcoin within the Bitcoin blockchain
 
-Unknown to many, Nakamoto built within the Bitcoin infrastracture a means for senders and receivers to communicate with each other. Nakamoto also built within the Bitcoin infrastracture smart contracts. These in-built communication system and smart contracts within the Bitcoin blockchain will be put into use in this novel Bitcoin Payment System.
+Unknown to many, Nakamoto built within the Bitcoin infrastructure a means for senders and receivers to communicate with each other. Nakamoto also built within the Bitcoin infrastructure smart contracts. These in-built communication system and smart contracts within the Bitcoin blockchain will be put into use in this novel Bitcoin Payment System.
 
 Novel Bitcoin Payment Service is a work in progress and needs your support.  
 
