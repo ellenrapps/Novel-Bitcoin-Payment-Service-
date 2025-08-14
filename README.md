@@ -18,8 +18,11 @@ Unknown to many, Nakamoto built within the Bitcoin infrastructure a means for se
 
 Milestones:
 The following are the key milestones for this project:
+
 . Complete activation of the Desktop (Linux, Windows) app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
+
 . Complete activation of the taproot single signature address, key-pair generation -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
+
 . Complete activation of the check bitcoin address balance feature -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
 
 Novel Bitcoin Payment Service is a work in progress and needs your support.  
