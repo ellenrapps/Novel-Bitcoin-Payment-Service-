@@ -16,10 +16,16 @@ Specifically, this payment service will allow ordinary folks to:
 
 Unknown to many, Nakamoto built within the Bitcoin infrastructure a means for senders and receivers to communicate with each other. Nakamoto also built within the Bitcoin infrastructure smart contracts. These in-built communication system and smart contracts within the Bitcoin blockchain will be put into use in this novel Bitcoin Payment System.
 
+Milestones:
+The following are the key milestones for this project:
+. Complete activation of the Desktop (Linux, Windows) app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
+. Complete activation of the taproot single signature address, key-pair generation -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
+. Complete activation of the check bitcoin address balance feature -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
+
 Novel Bitcoin Payment Service is a work in progress and needs your support.  
 
 Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
 
-Ellen Red, Sole Software Engineer/Developer for Novel Bitcoin Payment Service 
+Ellen Red, Sole Software Engineer/Developer of Novel Bitcoin Payment Service 
 
 
