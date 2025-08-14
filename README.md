@@ -21,6 +21,7 @@ Novel Bitcoin Payment Service is a work in progress and needs your support.
 Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
 
 Ellen Red, 
+
 Novel Bitcoin Payment Service, Software Engineer
 
 
