@@ -17,7 +17,6 @@ Specifically, this payment service will allow ordinary folks to:
 Unknown to many, Nakamoto built within the Bitcoin infrastructure a means for senders and receivers to communicate with each other. Nakamoto also built within the Bitcoin infrastructure smart contracts. These in-built communication system and smart contracts within the Bitcoin blockchain will be put into use in this novel Bitcoin Payment System.
 
 Current Project Milestones:
-The following are the key milestones for this project:
 
 . Complete activation of the Desktop (Linux, Windows) app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
 
