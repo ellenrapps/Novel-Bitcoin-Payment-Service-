@@ -1,11 +1,11 @@
-# AGPL-3.0 License. Copyright © 2025 Ellen Red. All rights reserved.
-
 import tkinter as tk
 from tkinter import WORD
+from tkinter import messagebox
 import master
 import decimal
-import requests
+import requests, json
 import master
+
 
 class Home():
     def __init__(self, root):
@@ -27,7 +27,7 @@ class Home():
         ##############
         # Main Widgets
         ##############
-        root.title('Novel Bitcoin Payment Service -- Testnet4. AGPL-3.0 License.')
+        root.title('Novel Bitcoin Payment Service -- Testnet 4. AGPL-3.0 License.')
         root.resizable(False, False)    
         root.config(bg='#414850')
         self.main_win_screen_width = root.winfo_screenwidth()
@@ -64,7 +64,7 @@ class Home():
         self.main_smart_button.grid(row=1, column=5)
 
         # Main Send Button
-        self.main_sats_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_send_click(), text= 'Send Satoshis/Messages', bg='#4f697f', width=20, font=('Segoe', 9))
+        self.main_sats_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_send_click(), text= 'Payment Service', bg='#4f697f', width=13, font=('Segoe', 9))
         self.main_sats_button.grid(row=1, column=6)
 
         # Main Privacy Button
@@ -72,7 +72,7 @@ class Home():
         self.main_privacy_button.grid(row=1, column=7) 
 
         # Main FAQ Button
-        self.main_faq_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_faq_click(), text= 'FAQ', bg='#4f697f', width=7, font=('Segoe', 9))
+        self.main_faq_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_faq_click(), text= 'FAQ', bg='#4f697f', width=4, font=('Segoe', 9))
         self.main_faq_button.grid(row=1, column=8)
 
         ##############
@@ -83,11 +83,11 @@ class Home():
         self.home_outer_frame.pack()
        
         # Home Label1
-        self.home_win_label = tk.Label(self.home_outer_frame, bg='#414850', fg='white', text='"Bitcoin: A Peer-to-Peer Electronic Cash System"', font=('Arial', 16, 'bold italic'))
+        self.home_win_label = tk.Label(self.home_outer_frame, bg='#414850', fg='white', text='"Bitcoin: A Peer-to-Peer Electronic Cash System"', font=('Segoe', 16, 'bold italic'))
         self.home_win_label.pack(side='top', pady=50)
 
         # Home Label1
-        self.home_win_label = tk.Label(self.home_outer_frame, bg='#414850', fg='white', text='Novel Bitcoin Payment Service\naims to be your very own Bitcoin payment service.', font=('Segue', 15))
+        self.home_win_label = tk.Label(self.home_outer_frame, bg='#414850', fg='white', text='Novel Bitcoin Payment Service aims to be your very own Bitcoin payment service.', font=('Segoe', 13, 'bold italic'))
         self.home_win_label.pack(side='top')
 
         ##################
@@ -102,25 +102,43 @@ class Home():
         self.explorer_win_label_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
         self.explorer_win_label_frame.pack(side='top')
 
-        # Explorer Address/ID + Search Frame 
-        self.explorer_addressid_search_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
-        self.explorer_addressid_search_frame.pack(side='top')
+        # Explorer Address/ID Frame
+        self.explorer_addressid_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
+        self.explorer_addressid_frame.pack(side='top')
+
+        # Explorer Search Buttons Frame 
+        self.explorer_search_buttons_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
+        self.explorer_search_buttons_frame.pack(side='top')
+
+        # Explorer Textbox Frame 
+        self.explorer_textbox_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
+        self.explorer_textbox_frame.pack(side='top')
         
         # Explorer Label
-        self.explorer_win_label = tk.Label(self.explorer_win_label_frame, bg='#414850', fg='white', text='B l o c k   E x p l o r e r   W i n d o w', font=('Arial', 11, 'bold'))
-        self.explorer_win_label.pack(side='left', pady=20)
+        self.explorer_win_label = tk.Label(self.explorer_win_label_frame, bg='#414850', fg='white', text='B l o c k   E x p l o r e r', font=('Segoe', 12, 'bold'))
+        self.explorer_win_label.pack(side='left')
 
-       # Explorer Address/ID + Search        
-        self.input_balance_label = tk.Label(self.explorer_addressid_search_frame, text="Enter Bitcoin Address (Limit to 62 Alphanumeric) *", font=("Arial", 11), fg='white', bg='#414850')
+        # Explorer Address & ID
+        self.input_balance_label = tk.Label(self.explorer_addressid_frame, text="Enter Bitcoin Address (Limit to 62 Alphanumeric) *", font=("Segoe", 10), fg='white', bg='#414850')
         self.input_balance_label.pack()
-        self.entry_balance = tk.Entry(self.explorer_addressid_search_frame, bg='#e2dada', validate="key", textvariable=self.address_balance_var, width=85, font=("Arial", 9))
+        self.entry_balance = tk.Entry(self.explorer_addressid_frame, bg='#e2dada', validate="key", textvariable=self.address_balance_var, width=85, font=("Segoe", 9))
         self.entry_balance['validatecommand'] = (self.entry_balance.register(self.explorer_val_addr),'%P','%d')
         self.entry_balance.pack()
-        self.balance_button = tk.Button(self.explorer_addressid_search_frame, text= "Check Bitcoin Address Balance", fg="black",  bg='#4f697f', height=1, width=30, font=("Arial", 10, 'bold'), command=self.explorer_show_delete_balance) 
+
+        # Explorer Check Address Balance Button
+        self.balance_button = tk.Button(self.explorer_search_buttons_frame, text= "Check Bitcoin Address Balance", fg="black",  bg='#4f697f', height=1, width=23, font=("Segoe", 10), command=self.explorer_show_delete_balance) 
         self.balance_button.bind("<Enter>", lambda event, h=self.balance_button : h.configure())
         self.balance_button.bind("<Leave>", lambda event, h=self.balance_button : h.configure())
-        self.balance_button.pack(pady=10)
-        self.text_balance = tk.Text(self.explorer_addressid_search_frame, bg='#e2dada', height=2, width=80, fg="black", font=("Arial", 11))
+        self.balance_button.grid(row=0, column=0, padx=10)
+        
+        # Explorer Instant Messaging System Button
+        self.explorer_messages_button = tk.Button(self.explorer_search_buttons_frame, state=tk.DISABLED, text= "Check Messages", fg="black",  bg='#4f697f', width=13, font=("Segoe", 10)) 
+        self.explorer_messages_button.bind("<Enter>", lambda event, h=self.explorer_messages_button : h.configure())
+        self.explorer_messages_button.bind("<Leave>", lambda event, h=self.explorer_messages_button : h.configure())
+        self.explorer_messages_button.grid(row=0, column=2, pady=7)
+
+        # Explorer Balance Textbox
+        self.text_balance = tk.Text(self.explorer_textbox_frame, bg='#e2dada', width=110, height=15, fg="black", font=("Arial", 11))
         self.text_balance.bind("<Key>", lambda e: "break")
         self.text_balance.bind("<Button-1>", self.explorer_disable_click_balance)
         self.text_balance.pack(pady=2)
@@ -142,17 +160,17 @@ class Home():
         self.create_address_textlogo_frame.pack()
 
         # Create Address Label
-        self.create_address_win_label = tk.Label(self.create_address_label_button_frame, bg='#414850', fg='white', text='C r e a t e  A d d r e s s   W i n d o w', font=('Arial', 11, 'bold'))
-        self.create_address_win_label.pack(side='top', pady=15)
+        self.create_address_win_label = tk.Label(self.create_address_label_button_frame, bg='#414850', fg='white', text='C r e a t e  A d d r e s s', font=('Segoe', 12, 'bold'))
+        self.create_address_win_label.pack(side='top')
         
         # Create Address Button
-        self.create_address_key_button = tk.Button(self.create_address_label_button_frame, text= "Create a Single Signature Taproot Bitcoin Address with Private Key", bg='#4f697f', height=1, width=60, font=("Arial", 10, 'bold'), command=self.create_address_show_delete_keyadd)
+        self.create_address_key_button = tk.Button(self.create_address_label_button_frame, text= "Generate Single Signature Taproot Bitcoin Address with Private Key", bg='#4f697f', height=1, width=52, font=("Segoe", 10), command=self.create_address_show_delete_keyadd)
         self.create_address_key_button.bind("<Enter>", lambda event, h=self.create_address_key_button: h.configure())
         self.create_address_key_button.bind("<Leave>", lambda event, h=self.create_address_key_button: h.configure())
         self.create_address_key_button.pack(pady=5)
         
         # Create Address Text
-        self.create_address_key_text = tk.Text(self.create_address_textlogo_frame, bg='#e2dada', height=4, width=70, fg="black", font=("Arial", 9))
+        self.create_address_key_text = tk.Text(self.create_address_textlogo_frame, bg='#e2dada', height=4, width=70, fg="black", font=("Segoe", 9))
         self.create_address_key_text.bind("<Button-1>", self.create_address_disable_click_master)
         self.create_address_key_text.bind("<Key>", lambda e: "break")
         self.create_address_key_text.bind("<Key>", lambda e: self.create_address_mouse_copy(e))
@@ -178,69 +196,67 @@ class Home():
         self.send_win_label_frame.pack(side='top')
 
         # Send Label
-        self.send_win_label = tk.Label(self.send_win_label_frame, bg='#414850', fg='white', text='S e n d   S a t o s h i s / M e s s a g e   W i n d o w', font=('Arial', 11, 'bold'))
-        self.send_win_label.pack(side='left', pady=10)
+        self.send_win_label = tk.Label(self.send_win_label_frame, bg='#414850', fg='white', text='P a y m e n t   S e r v i c e', font=('Segoe', 12, 'bold'))
+        self.send_win_label.pack(side='left')
 
-        # Send Warning
-        self.label_send = tk.Label(self.send_outer_frame, text='Important Notice: Check multiple times entries made. Wrong entry could mean sending Satoshis to wrong person.', bg='#414850', fg="white", font=("Segoe", 10))
-        self.label_send.pack(pady=5)
+        # Send General Frame       
         self.send_general_frame = tk.Frame(self.send_outer_frame, bg='#414850')
         self.send_general_frame.pack()
 
         # Send Recipient Address
-        self.recipient_address_label = tk.Label(self.send_general_frame, text="Enter Recipient Address (Limit to 62 Alphanumeric)", font=("Arial", 10), fg='white', bg='#414850')
+        self.recipient_address_label = tk.Label(self.send_general_frame, text="Enter Recipient Address (Limit to 62 Alphanumeric)", font=("Segoe", 10), fg='white', bg='#414850')
         self.recipient_address_label.pack()
-        self.input_recipient_address = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.recipient_address_var, width=85, font=("Arial", 8))
+        self.input_recipient_address = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.recipient_address_var, width=85, font=("Segoe", 8))
         self.input_recipient_address['validatecommand'] = (self.input_recipient_address.register(self.send_val_addr),'%P','%d')
-        self.input_recipient_address.pack(pady=2)
+        self.input_recipient_address.pack(padx=20, pady=2)
 
         # Send Amount to Recipient
-        self.amount_recipient_label = tk.Label(self.send_general_frame, text="Enter Amount to Recipient (Limit to 8 decimal places)", font=("Arial", 10), fg='white', bg='#414850')
+        self.amount_recipient_label = tk.Label(self.send_general_frame, text="Enter Amount to Recipient (Limit to 8 decimal places)", font=("Segoe", 10), fg='white', bg='#414850')
         self.amount_recipient_label.pack()
-        self.input_recipient_amount = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.recipient_amount_var, width=85,font=("Arial", 8))
+        self.input_recipient_amount = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.recipient_amount_var, width=85,font=("Segoe", 8))
         self.input_recipient_amount['validatecommand'] = (self.input_recipient_amount.register(self.send_val_deci),'%P','%d')
-        self.input_recipient_amount.pack(pady=2)
+        self.input_recipient_amount.pack(padx=20, pady=2)
 
         # Send Miner's Fee
-        self.miner_fee_label = tk.Label(self.send_general_frame, text="Enter Miner's Fee (Limit to 8 decimal places)", fg='white', bg='#414850', font=("Arial", 10))
+        self.miner_fee_label = tk.Label(self.send_general_frame, text="Enter Miner's Fee (Limit to 8 decimal places)", fg='white', bg='#414850', font=("Segoe", 10))
         self.miner_fee_label.pack()
-        self.input_miner_amount = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.miner_fee_var, width=85,font=("Arial", 8))
+        self.input_miner_amount = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.miner_fee_var, width=85,font=("Segoe", 8))
         self.input_miner_amount['validatecommand'] = (self.input_miner_amount.register(self.send_val_deci),'%P','%d')
-        self.input_miner_amount.pack(pady=2)
+        self.input_miner_amount.pack(padx=20, pady=2)
 
         # Sender Address
-        self.sender_address_label = tk.Label(self.send_general_frame, text="Enter Sender Address (Limit to 62 Alphanumeric)", font=("Arial", 10), fg='white', bg='#414850')
+        self.sender_address_label = tk.Label(self.send_general_frame, text="Enter Sender Address (Limit to 62 Alphanumeric)", font=("Segoe", 10), fg='white', bg='#414850')
         self.sender_address_label.pack()
-        self.input_sender_address = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.sender_address_var, width=85, font=("Arial", 8))
+        self.input_sender_address = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.sender_address_var, width=85, font=("Segoe", 8))
         self.input_sender_address['validatecommand'] = (self.input_sender_address.register(self.send_val_addr),'%P','%d')
-        self.input_sender_address.pack(pady=2)
+        self.input_sender_address.pack(padx=20, pady=2)
 
         # Sender Private Key
-        self.sender_key_label = tk.Label(self.send_general_frame, text="Enter Sender Private Key (Limit to 64 Alphanumeric.Key isn't visible.) Novel self-destructs all users' data. It has no memory of users' data.", font=("Arial", 10), fg='white', bg='#414850')
+        self.sender_key_label = tk.Label(self.send_general_frame, text="Enter Sender Private Key (Limit to 64 Alphanumeric. Key isn't visible.) Novel self-destructs all users' data.", font=("Segoe", 10), fg='white', bg='#414850')
         self.sender_key_label.pack(padx=10)
-        self.input_sender_key = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.sender_key_var, width=85, font=("Arial", 8), show="*")
+        self.input_sender_key = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.sender_key_var, width=85, font=("Segoe", 8), show="*")
         self.input_sender_key['validatecommand'] = (self.input_sender_key.register(self.send_val_k),'%P','%d')
-        self.input_sender_key.pack(pady=2)
+        self.input_sender_key.pack(padx=20, pady=2)
 
         # Send Message to Recipient
-        self.sender_note_label = tk.Label(self.send_general_frame, text="Enter Message to Recipient (Limit to 64 Alphanumeric) -- Optional", font=("Arial", 10), fg='white', bg='#414850')
+        self.sender_note_label = tk.Label(self.send_general_frame, text="Enter Message to Recipient (Limit to 64 Alphanumeric) -- Optional", font=("Segoe", 10), fg='white', bg='#414850')
         self.sender_note_label.pack()
-        self.input_note_key = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.sender_note_var, width=85, font=("Arial", 8))
+        self.input_note_key = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.sender_note_var, width=85, font=("Segoe", 8))
         self.input_note_key['validatecommand'] = (self.input_note_key.register(self.send_val_k),'%P','%d')
-        self.input_note_key.pack(pady=2)
+        self.input_note_key.pack(padx=20, pady=2)
 
         # Send Donation 
-        self.send_donation_label = tk.Label(self.send_general_frame, text="Enter Donation Amount to Developer (Limit to 8 decimal places) -- Optional", fg='white', bg='#414850', font=("Arial", 10))
+        self.send_donation_label = tk.Label(self.send_general_frame, text="Enter Donation Amount to Developer (Limit to 8 decimal places) -- Optional", fg='white', bg='#414850', font=("Segoe", 10))
         self.send_donation_label.pack()
-        self.send_donation_amount = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.send_donation_var, width=85,font=("Arial", 8))
+        self.send_donation_amount = tk.Entry(self.send_general_frame, bg='#e2dada', validate="key", textvariable=self.send_donation_var, width=85,font=("Segoe", 8))
         self.send_donation_amount['validatecommand'] = (self.send_donation_amount.register(self.send_val_deci),'%P','%d')
-        self.send_donation_amount.pack(pady=2)
+        self.send_donation_amount.pack(padx=20, pady=2)
 
         # Send Button
-        self.send_button = tk.Button(self.send_outer_frame, text= "Send Satoshis/Message (Disabled)", state=tk.DISABLED, fg="black", bg='#4f697f', height=1, width=35, font=("Arial", 10, 'bold'), command=self.send_update_pbar) 
+        self.send_button = tk.Button(self.send_outer_frame, text= "Send Bitcoin + Message", state=tk.DISABLED, fg="black", bg='#4f697f', height=1, width=19, font=("Segoe", 10, 'bold'), command=self.send_update_pbar) 
         self.send_button.bind("<Enter>", lambda event, h=self.send_button : h.configure())
         self.send_button.bind("<Leave>", lambda event, h=self.send_button : h.configure())
-        self.send_button.pack(pady=10)
+        self.send_button.pack(pady=5)
 
         #######################
         # Privacy-Terms Widgets
@@ -257,7 +273,7 @@ class Home():
         # Privacy Textbox
         self.privacy_scrollbar = tk.Scrollbar(self.privacy_inner_frame, orient='vertical')
         self.privacy_scrollbar.pack(side='right', fill='y')        
-        self.privacy_textbox = tk.Text(self.privacy_inner_frame, wrap=WORD, width=110, height=23, font=('Arial', 11), yscrollcommand=self.privacy_scrollbar.set)
+        self.privacy_textbox = tk.Text(self.privacy_inner_frame, wrap=WORD, width=110, height=23, font=('Segoe', 11), yscrollcommand=self.privacy_scrollbar.set)
         self.privacy_textbox.insert(tk.END, 'Privacy Policy + Terms of Service\n\nBitcoin Payment Service respects your privacy. It doesn’t access, collect, or transmit any information (data that could be used to identify a person). As a user of this service, you have full control over your bitcoin address and private key. What this means is that you are fully responsible for securing your bitcoin address and private key and you have full control over your bitcoin funds.\n\n\n\nTerms of Service\n\nBY USING THIS BITCOIN PAYMENT SERVICE, YOU AGREE THAT YOU WILL NOT USE THIS SERVICE TO COMMIT ILLEGAL ACTIVITIES WITHIN AND OUTSIDE YOUR GEOGRAPHICAL LOCATION.')  
         self.privacy_textbox.config(state=tk.DISABLED)
         self.privacy_textbox.pack()
@@ -277,7 +293,7 @@ class Home():
         # FAQ Textbox
         self.faq_scrollbar = tk.Scrollbar(self.faq_textbox_frame, orient='vertical')
         self.faq_scrollbar.pack(side='right', fill='y')
-        self.faq_textbox = tk.Text(self.faq_textbox_frame, wrap=WORD, width=110, height=23, font=('Arial', 11), yscrollcommand=self.faq_scrollbar.set)
+        self.faq_textbox = tk.Text(self.faq_textbox_frame, wrap=WORD, width=110, height=23, font=('Segoe', 11), yscrollcommand=self.faq_scrollbar.set)
         self.faq_textbox.insert(tk.END, 'Frequently Asked Questions(FAQ)/Tutorial\n\nWhat is new with this Bitcoin Payment Service?\n\nBitcoin Payment Service aims to be your very own payment service, attaining the goal of Peer-to-Peer Electronic Cash System as envisioned by Satoshi Nakamoto.\n\nIn the Bitcoin white paper written by Nakamoto, Peer-to-Peer Electronic Cash System is described as allowing online payments to be sent directly from one party to another without going through a financial institution.\n\nThis payment service does not aim to be a financial institution. Rather, this payment service aims to be a means for ordinary folks to send bitcoin, whether as payment or donation, to one another, that is, without an intermediary financial institution.\n\nSpecifically, this payment service will allow ordinary folks to:\n1. Create bitcoin addresses\n2. Create smart contracts\n3. Check bitcoin address balance using an in-built blockchain explorer\n4. Receive bitcoin\n5. Send bitcoin\n6. Communicate regarding the received or sent satoshis within the Bitcoin blockchain\n\nUnknown to many, Nakamoto built within the Bitcoin infrastracture a means for senders and receivers to communicate with each other. Nakamoto also built within the Bitcoin infrastracture smart contracts. These in-built communication system and smart contracts within the Bitcoin blockchain will be put into use in this novel Bitcoin Payment System.\n\nThis Bitcoin Payment Service is a work in progress.')  
         self.faq_textbox.config(state=tk.DISABLED)
         self.faq_textbox.pack()        
@@ -298,6 +314,14 @@ class Home():
         self.main_home_button.config(state=tk.DISABLED)
         self.main_sats_button.config(state=tk.NORMAL)
         self.home_outer_frame.pack()
+        # Destroy Payment Entries Pending Send Button Activation
+        self.input_recipient_address.delete(0, tk.END)
+        self.input_recipient_amount.delete(0, tk.END)
+        self.input_miner_amount.delete(0, tk.END)
+        self.input_sender_address.delete(0, tk.END)
+        self.input_sender_key.delete(0, tk.END)
+        self.input_note_key.delete(0, tk.END)
+        self.send_donation_amount.delete(0, tk.END)
     
     def main_explorer_click(self):
         self.home_outer_frame.pack_forget()
@@ -451,7 +475,7 @@ class Home():
     def is_address_copy_clicked(self):
         self.create_address_textlogo_frame.clipboard_clear()
         self.create_address_textlogo_frame.clipboard_append(self.create_address_key_text.get("1.0", tk.END))   
-     
+    
     
     ################
     # Send Functions
