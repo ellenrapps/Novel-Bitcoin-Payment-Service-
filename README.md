@@ -38,10 +38,6 @@ Future Project Milestones:
 
 This project needs seed funding. Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
 
-Ellen Red
-
-Software Engineer
-
-Novel Bitcoin Payment Service 
+Ellen Red, Software Engineer of Novel Bitcoin Payment Service 
 
 
