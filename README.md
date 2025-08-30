@@ -36,7 +36,7 @@ Future Project Milestones:
 . Activate Smart Contracts, including Escrow and Inheritance Contracts
 
 
-Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
+This project needs seed funding. Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
 
 Ellen Red, Sole Software Engineer/Developer of Novel Bitcoin Payment Service 
 
