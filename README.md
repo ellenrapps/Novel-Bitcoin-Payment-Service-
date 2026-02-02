@@ -35,12 +35,3 @@ Future Project Milestones:
 . Activate Smart Contracts, including Escrow and Inheritance Contracts
 
 
-This project needs seed funding. Support this project work via:
-
-GitHub Sponsors: https://github.com/sponsors/ellenrapps
-
-Bitcoin donation: bc1qrxl9f0vjue2r6ckujh8qv05j2cqt343muszwgf
-
-Ellen Red, Software Engineer of Novel Bitcoin Payment Service 
-
-
