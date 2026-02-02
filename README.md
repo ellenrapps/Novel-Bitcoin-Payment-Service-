@@ -1,4 +1,4 @@
-**February 1, 2026 Update: This project is no longer maintained. **
+February 1, 2026 Update: This project is no longer maintained.
 
 Novel Bitcoin Payment Service aims to be your very own payment service, attaining the goal of Peer-to-Peer Electronic Cash System as envisioned by Satoshi Nakamoto.
 
