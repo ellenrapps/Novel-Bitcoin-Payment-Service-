@@ -1,4 +1,4 @@
-**Status: Archived. I built this project independently without any outside backing. As of now, I’ve stepped away from the project and am no longer providing updates or bug fixes.**
+**Status: Archived. I built this project independently without any outside support. As of now, I’ve stepped away from the project and am no longer providing updates or bug fixes.**
 
 Novel Bitcoin Payment Service aims to be your very own payment service, attaining the goal of Peer-to-Peer Electronic Cash System as envisioned by Satoshi Nakamoto.
 
