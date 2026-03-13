@@ -34,4 +34,4 @@ Future Project Milestones:
 
 . Activate Smart Contracts, including Escrow and Inheritance Contracts
 
-
+Ellen Red, Sole Software Engineer of Novel Bitcoin Payment Service
