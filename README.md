@@ -1,4 +1,4 @@
-**Watch this space. I am building this project independently without any outside support.**
+**Watch this space. I am building this project independently, without any outside support.**
 
 Novel Bitcoin Payment Service aims to be your very own payment service, attaining the goal of Peer-to-Peer Electronic Cash System as envisioned by Satoshi Nakamoto.
 
@@ -6,7 +6,7 @@ In the Bitcoin white paper written by Nakamoto, Peer-to-Peer Electronic Cash Sys
 
 This payment service does not aim to be a financial institution. Rather, this payment service aims to be a means for ordinary folks to send Bitcoin, whether as payment or donation, to one another, that is, without an intermediary financial institution.
 
-Specifically, this payment service will allow ordinary folks to:
+Specifically, this payment service will allow everyday users to:
 1. Create Bitcoin Addresses
 2. Create Smart Contracts
 3. Check Bitcoin address balance and transaction details using an in-built blockchain explorer
