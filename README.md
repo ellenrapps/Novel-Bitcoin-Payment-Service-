@@ -7,7 +7,7 @@ In the Bitcoin white paper written by Nakamoto, Peer-to-Peer Electronic Cash Sys
 This payment service does not aim to be a financial institution. Rather, this payment service aims to be a means for ordinary folks to send Bitcoin, whether as payment or donation, to one another, that is, without an intermediary financial institution.
 
 Specifically, this payment service will allow everyday users to:
-1. Create Bitcoin Addresses
+1. Create Bitcoin Addresses + Key Pair (Public Key and Private Key)
 2. Create Smart Contracts
 3. Check Bitcoin address balance and transaction details using an in-built blockchain explorer
 4. Receive Bitcoin
