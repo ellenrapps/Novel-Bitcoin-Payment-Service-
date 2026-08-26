@@ -1,37 +1,12 @@
-**Watch this space. I am building this project independently, without any outside support.**
+**Novel Bitcoin Payment Service – August 26, 2026 Update**
 
-Novel Bitcoin Payment Service aims to be your very own payment service, attaining the goal of Peer-to-Peer Electronic Cash System as envisioned by Satoshi Nakamoto.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9nZsE_K_fcU?si=zUId8u6-l7e4m96Z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-In the Bitcoin white paper written by Nakamoto, Peer-to-Peer Electronic Cash System is described as allowing payments to be sent directly from one party to another without going through a financial institution.
+Novel Bitcoin Payment Service is your very Bitcoin Payment Service. 
 
-This payment service does not aim to be a financial institution. Rather, this payment service aims to be a means for ordinary folks to send Bitcoin, whether as payment or donation, to one another, that is, without an intermediary financial institution.
+Milestones as of August 26, 2026:
+- Connect to your local Bitcoin Node
+- Create Bitcoin addresses. For each Bitcoin address created, you get the Public Key and Private Key – this gives the true meaning of "Not your keys, not your Bitcoin."
+- Check your addresses balance and transaction details using your very own Bitcoin Block Explorer
 
-Specifically, this payment service will allow everyday users to:
-1. Create Bitcoin Addresses + Key Pair (Public Key and Private Key)
-2. Create Smart Contracts
-3. Check Bitcoin address balance and transaction details using an in-built blockchain explorer
-4. Receive Bitcoin
-5. Send Bitcoin 
-6. Communicate regarding the received or sent Bitcoin within the Bitcoin blockchain
-
-Unknown to many, Nakamoto built within the Bitcoin infrastructure a means for senders and receivers to communicate with each other. Nakamoto also built within the Bitcoin infrastructure smart contracts. These in-built communication system and smart contracts within the Bitcoin blockchain will be put into use in this novel Bitcoin Payment System.
-
-Current Project Milestones:
-
-. Complete activation of the desktop (Linux, Windows) app front-end -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
-
-. Complete activation of the taproot single signature address, key-pair generation -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/master.py
-
-. Complete activation of the check address balance feature -> Link: https://github.com/ellenrapps/Novel-Bitcoin-Payment-Service-/blob/main/main.py
-
-Future Project Milestones:
-
-. Activate the built-in Block Explorer
-
-. Activate the Payment Service
-
-. Activate the Instant Messaging System
-
-. Activate Smart Contracts, including Escrow and Inheritance Contracts
-
-Ellen Red, Sole Software Developer of Novel Bitcoin Payment Service
+This update is limited to Bitcoin Testnet Taproot Key Path and Linux.
