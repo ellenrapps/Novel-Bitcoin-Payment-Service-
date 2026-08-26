@@ -2,7 +2,7 @@
 
 https://www.youtube.com/watch?v=9nZsE_K_fcU
 
-Novel Bitcoin Payment Service is your very Bitcoin Payment Service. 
+Novel Bitcoin Payment Service is your very own Bitcoin Payment Service. 
 
 Milestones as of August 26, 2026:
 - Connect to your local Bitcoin Node
