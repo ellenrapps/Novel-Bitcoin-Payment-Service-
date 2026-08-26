@@ -1,4 +1,4 @@
-# AGPL-3.0 License. Copyright © 2024 Ellen Red. All rights reserved.
+# AGPL-3.0 License. Copyright © 2026 Ellen Red
 
 
 from dataclasses import dataclass
