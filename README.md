@@ -1,6 +1,6 @@
 **Novel Bitcoin Payment Service – August 26, 2026 Update**
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9nZsE_K_fcU?si=zUId8u6-l7e4m96Z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+https://www.youtube.com/watch?v=9nZsE_K_fcU
 
 Novel Bitcoin Payment Service is your very Bitcoin Payment Service. 
 
