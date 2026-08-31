@@ -3,11 +3,14 @@
 
 https://github.com/user-attachments/assets/5bde1357-f801-461e-9684-57e0f8c93b19
 
-Novel Bitcoin Payment Service is your very own Bitcoin Payment Service. 
+Novel Bitcoin Payment Service puts true financial sovereignty back in your hands. Run your own Bitcoin payment infrastructure without relying on centralized intermediaries.
 
-Milestones as of August 26, 2026:
-- Connect to your local Bitcoin Node
-- Create Bitcoin addresses. For each Bitcoin address created, you get the Public Key and Private Key – this gives the true meaning of "Not your keys, not your Bitcoin".
-- Check your address balance and transaction details using your very own Bitcoin Block Explorer (via watch-only wallet)
+Native Node Support: Connect directly to your local Bitcoin node for ultimate privacy.
 
-This update is limited to Bitcoin Testnet Taproot Key Path and Linux.
+True Self-Custody: Generate addresses with full access to both public and private keys—embodying the principle: "Not your keys, not your coins."
+
+Self-Hosted Bitcoin Block Explorer: Monitor balances and transaction history locally.
+
+Platform & Script Compatibility: Built specifically for Linux platforms with initial support for Bitcoin Testnet Taproot Key Path addresses.
+
+Note: Bitcoin sending functionality is not yet enabled.
