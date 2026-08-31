@@ -7,7 +7,7 @@ Novel Bitcoin Payment Service puts true financial sovereignty back in your hands
 
 Native Node Support: Connect directly to your local Bitcoin node for ultimate privacy.
 
-True Self-Custody: Generate addresses with full access to both public and private keys—embodying the principle: "Not your keys, not your coins."
+True Self-Custody: Generate addresses with full access to both public and private keys – embodying the principle: "Not your keys, not your coins."
 
 Self-Hosted Bitcoin Block Explorer: Monitor balances and transaction history locally.
 
