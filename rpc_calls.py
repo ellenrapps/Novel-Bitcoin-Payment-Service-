@@ -1,6 +1,5 @@
 # AGPL-3.0 License. Copyright © 2026 Ellen Red
 
-
 import json
 import urllib.request
 import urllib.error
@@ -19,7 +18,7 @@ def call_rpc(
     params: Optional[List[Any]] = None,
 ) -> Dict[str, Any]:
 
-    url = f'http://{'127.0.0.1'}:{18332}'
+    url = f'http://{'127.0.0.1'}:{48332}'
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'python-explorer-client/2026-secure',
