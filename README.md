@@ -11,6 +11,6 @@ True Self-Custody: Generate addresses with full access to both public and privat
 
 Self-Hosted Bitcoin Block Explorer: Monitor balances and transaction history locally.
 
-Platform & Script Compatibility: Built specifically for Linux platforms with initial support for Bitcoin Testnet Taproot Key Path addresses.
+Platform & Script Compatibility: Built specifically for Linux platforms with initial support for Bitcoin Testnet4 Taproot Key Path addresses.
 
 Note: Bitcoin sending functionality is not yet enabled.
