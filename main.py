@@ -1,12 +1,9 @@
 # AGPL-3.0 License. Copyright © 2026 Ellen Red
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox
+from tkinter import scrolledtext, messagebox
 import threading
-import re
 import base64
-from datetime import datetime
-from decimal import Decimal
 import master_key
 import rpc_calls
 
@@ -18,7 +15,7 @@ class Home():
         self.add_default_text = 'Enter Testnet Taproot Public Key'
         self.check_default_text = 'Enter Testnet Taproot Address' 
         self.rpc_host = '127.0.0.1'
-        self.rpc_port = 18332
+        self.rpc_port = 48332
         self.rpc_username = None
         self.rpc_auth_header = None
         self.root.protocol('WM_DELETE_WINDOW', self.on_close)       
@@ -318,7 +315,7 @@ class Home():
         )
 
         copy_text_label.pack(side='left')
-        copy_text_btn_frame.bind('<Button-1>', lambda e: copy_text(), )
+        copy_text_btn_frame.bind('<Button-1>', lambda e: self.copy_text())
         copy_text_btn_frame.bind('<Enter>', lambda e: copy_text_btn_frame.config(bg='#99d2f2'))
         copy_text_btn_frame.bind('<Leave>', lambda e: copy_text_btn_frame.config(bg='#e0f7fa'))
         copy_text_btn_frame.place(in_=self.explorer_textbox, relx=1.0, rely=0.0, anchor='ne', x=-14)
