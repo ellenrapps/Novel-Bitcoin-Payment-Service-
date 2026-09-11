@@ -5,20 +5,19 @@ import urllib.request
 import urllib.error
 import re
 from decimal import Decimal, InvalidOperation
-from typing import Any, Dict, Optional, List, Tuple
+from typing import Any, Dict, Optional, List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def call_rpc(
     host: str,
     port: int,
-    username: str,
     auth_header: str,
     method: str,
     params: Optional[List[Any]] = None,
 ) -> Dict[str, Any]:
 
-    url = f'http://{'127.0.0.1'}:{48332}'
+    url = f'http://{host}:{port}'
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'python-explorer-client/2026-secure',
@@ -36,7 +35,7 @@ def call_rpc(
     req = urllib.request.Request(url, data=json_data, headers=headers, method='POST')
 
     try:
-        with urllib.request.urlopen(req, timeout=5) as response:
+        with urllib.request.urlopen(req, timeout=15) as response:
             raw_data = response.read()
             
             if len(raw_data) == 0:
@@ -140,10 +139,10 @@ def call_rpc(
 
 
 #####################
-# Get Blockchain Info
+# Blockchain Info
 #####################
-def get_blockchain_info(host: str, port: int, username:str, auth_header: str) -> Dict[str, Any]:
-    resp = call_rpc(host, port, username, auth_header, 'getblockchaininfo')
+def get_blockchain_info(host, port, auth_header) -> Dict[str, Any]:
+    resp = call_rpc(host, port, auth_header, 'getblockchaininfo')
 
     if not resp['success']:
         return resp
@@ -151,9 +150,7 @@ def get_blockchain_info(host: str, port: int, username:str, auth_header: str) ->
     formatted_json = json.dumps(resp['data'], indent=4, separators=(',', ': '))
     return {
         'success': True,
-        'data': (
-            f'✅ Connected to Local Bitcoin Node'
-        ),
+        'data': f'Connection Status: Successfully connected to Bitcoin Testnet4 node.\n✅ "initialblockdownload: false" means the node is fully synchronized with the blockchain\n❎ "initialblockdownload: true" means the node is not fully synchronized with the blockchain\n\nBlockchain Info:\n{formatted_json}\n\n',
     }
 
 #######################
@@ -162,11 +159,10 @@ def get_blockchain_info(host: str, port: int, username:str, auth_header: str) ->
 def create_or_load_wallet(
     host: str,
     port: int,
-    username: str,
     auth_header: str,
     wallet_name: str
 ) -> Dict[str, Any]:
-    resp = call_rpc(host, port, username, auth_header, 'listwallets')
+    resp = call_rpc(host, port, auth_header, 'listwallets')
     if not resp.get('success'):
         return resp
 
@@ -177,7 +173,6 @@ def create_or_load_wallet(
     resp = call_rpc(
         host,
         port,
-        username,
         auth_header,
         'createwallet',
         [
@@ -197,7 +192,6 @@ def create_or_load_wallet(
         load_resp = call_rpc(
             host,
             port,
-            username,
             auth_header,
             'loadwallet',
             [wallet_name]
@@ -212,11 +206,10 @@ def create_or_load_wallet(
 ################
 # Add Public Key
 ################
-def get_descriptor_with_checksum(host, port, username, auth_header, descriptor):
+def get_descriptor_with_checksum(host, port, auth_header, descriptor):
     resp = call_rpc(
         host=host,
         port=port,
-        username=username,
         auth_header=auth_header,
         method='getdescriptorinfo',
         params=[descriptor]
@@ -230,7 +223,6 @@ def get_descriptor_with_checksum(host, port, username, auth_header, descriptor):
 def rpc_add_pubkey(
     host: str,
     port: int,
-    username: str,
     auth_header: str,    
     pubkey_hex: str,
     label: str = '#1',
@@ -253,7 +245,7 @@ def rpc_add_pubkey(
 
     try:
         descriptor_with_checksum = get_descriptor_with_checksum(
-            host, port, username, auth_header, base_descriptor
+            host, port, auth_header, base_descriptor
         )
     except Exception as e:
         return {'success': False, 'data': f"Failed to compute descriptor checksum: {e}"}
@@ -262,7 +254,6 @@ def rpc_add_pubkey(
         list_resp = call_rpc(
             host=host,
             port=port,
-            username=username,
             auth_header=auth_header,
             method='listdescriptors',
             params=[]
@@ -296,7 +287,6 @@ def rpc_add_pubkey(
         resp = call_rpc(
             host=host,
             port=port,
-            username=username,
             auth_header=auth_header,
             method='importdescriptors',
             params=[[descriptor_entry]]
@@ -336,7 +326,6 @@ def _is_valid_taproot_testnet_address(address: str) -> bool:
 def rpc_scan_address_utxos(
     host: str,
     port: int,
-    username: str,
     auth_header: str,
     address: str
 ) -> Dict[str, Any]:
@@ -353,7 +342,6 @@ def rpc_scan_address_utxos(
         resp = call_rpc(
             host=host,
             port=port,
-            username=username,
             auth_header=auth_header,
             method='scantxoutset',
             params=['start', [f"addr({address})"]]
@@ -394,7 +382,6 @@ def rpc_scan_address_utxos(
 def rpc_get_transaction_details(
     host: str,
     port: int,
-    username: str,
     auth_header: str,
     txid: str
 ) -> Dict[str, Any]:
@@ -409,10 +396,9 @@ def rpc_get_transaction_details(
         resp = call_rpc(
             host=host,
             port=port,
-            username=username,
             auth_header=auth_header,
             method='getrawtransaction',
-            params=[txid, True]  # decoded JSON
+            params=[txid, True]  
         )
     except Exception as e:
         return {'success': False, 'data': f"RPC call 'getrawtransaction' failed: {e}"}
@@ -442,7 +428,6 @@ def _normalize_tx_for_sorting(tx: Dict[str, Any]) -> int:
 def fetch_latest_balance_transactions(
     host: str,
     port: int,
-    username: str,
     auth_header: str,
     address: str,
     limit: int = 5
@@ -456,7 +441,7 @@ def fetch_latest_balance_transactions(
             )
         }
 
-    scan_res = rpc_scan_address_utxos(host, port, username, auth_header, address)
+    scan_res = rpc_scan_address_utxos(host, port, auth_header, address)
     if not scan_res['success']:
         return scan_res
 
@@ -473,7 +458,7 @@ def fetch_latest_balance_transactions(
         if txid in seen_txids:
             return None
         seen_txids.add(txid)
-        tx_res = rpc_get_transaction_details(host, port, username, auth_header, txid)
+        tx_res = rpc_get_transaction_details(host, port, auth_header, txid)
         return txid, tx_res
 
     if txids:
@@ -507,21 +492,16 @@ def fetch_latest_balance_transactions(
                         'sequence': vin.get('sequence'),
                         'scriptSig': vin.get('scriptSig', {}).get('hex', ''),
                         'txinwitness': vin.get('txinwitness', [])
-                    })
-
+                    })                
+                
                 outputs = []
                 for i, vout in enumerate(tx.get('vout', [])):
                     outputs.append({
                         'index': i,
-                        'value': str(vout.get('value', '0')),
-                        'scriptPubKey': {
-                            'asm': vout.get('scriptPubKey', {}).get('asm', ''),
-                            'hex': vout.get('scriptPubKey', {}).get('hex', ''),
-                            'type': vout.get('scriptPubKey', {}).get('type', ''),
-                            'addresses': vout.get('scriptPubKey', {}).get('addresses', [])
-                        }
+                        'value': str(vout.get('value', '0'))                        
                     })
 
+                    
                 detailed_txs.append({
                     'txid': tx.get('txid'),
                     'blockheight': tx.get('blockheight'),
