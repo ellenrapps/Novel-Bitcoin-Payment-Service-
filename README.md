@@ -1,7 +1,7 @@
 
 
+https://github.com/user-attachments/assets/b763a836-110b-46c0-8793-3f000d4848bd
 
-https://github.com/user-attachments/assets/5bde1357-f801-461e-9684-57e0f8c93b19
 
 Novel Bitcoin Payment Service puts true financial sovereignty back in your hands. Run your own Bitcoin payment infrastructure without relying on centralized intermediaries.
 
