@@ -13,4 +13,4 @@ Self-Hosted Bitcoin Block Explorer: Monitor balances and transaction history loc
 
 Platform & Script Compatibility: Built specifically for Linux platforms with initial support for Bitcoin Testnet4 Taproot Key Path addresses.
 
-Note: Bitcoin Sending functionality and Check Messages functionality are not yet enabled.
+Note: Sending Bitcoin and checking messages are not yet enabled. 
