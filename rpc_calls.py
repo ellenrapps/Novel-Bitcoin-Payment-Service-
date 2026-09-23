@@ -35,7 +35,7 @@ def call_rpc(
     req = urllib.request.Request(url, data=json_data, headers=headers, method='POST')
 
     try:
-        with urllib.request.urlopen(req, timeout=15) as response:
+        with urllib.request.urlopen(req, timeout=60) as response:
             raw_data = response.read()
             
             if len(raw_data) == 0:
@@ -64,7 +64,7 @@ def call_rpc(
                     data_payload = err.get('data')
                     
                     if code == -5:
-                        final_msg = f"RPC Validation Error (-5): {message}"
+                        final_msg = f'RPC Validation Error (-5): {message}'
                         
                         return {
                             'success': False,
@@ -153,6 +153,7 @@ def get_blockchain_info(host, port, auth_header) -> Dict[str, Any]:
         'data': f'Connection Status: Successfully connected to Bitcoin Testnet4 node.\n✅ "initialblockdownload: false" means the node is fully synchronized with the blockchain\n❎ "initialblockdownload: true" means the node is not fully synchronized with the blockchain\n\nBlockchain Info:\n{formatted_json}\n\n',
     }
 
+
 #######################
 # Create or Load Wallet
 #######################
@@ -203,6 +204,7 @@ def create_or_load_wallet(
 
     return resp
 
+
 ################
 # Add Public Key
 ################
@@ -215,7 +217,7 @@ def get_descriptor_with_checksum(host, port, auth_header, descriptor):
         params=[descriptor]
     )
     if not resp.get('success'):
-        raise RuntimeError(f"getdescriptorinfo failed: {resp.get('data')}")
+        raise RuntimeError(f'getdescriptorinfo failed: {resp.get("data")}')
     info = resp['data']
     return info['descriptor']
 
@@ -236,8 +238,8 @@ def rpc_add_pubkey(
         return {
             'success': False,
             'data': (
-                f"Invalid public key length for Taproot. Expected 64 hex chars (32 bytes). "
-                f"Got {pubkey_len}."
+                f'Invalid public key length for Taproot. Expected 64 hex chars (32 bytes). '
+                f'Got {pubkey_len}.'
             )
         }
 
@@ -248,7 +250,7 @@ def rpc_add_pubkey(
             host, port, auth_header, base_descriptor
         )
     except Exception as e:
-        return {'success': False, 'data': f"Failed to compute descriptor checksum: {e}"}
+        return {'success': False, 'data': f'Failed to compute descriptor checksum: {e}'}
 
     try:
         list_resp = call_rpc(
@@ -259,7 +261,7 @@ def rpc_add_pubkey(
             params=[]
         )
     except Exception as e:
-        return {'success': False, 'data': f"RPC call 'listdescriptors' failed: {e}"}
+        return {'success': False, 'data': f'RPC call "listdescriptors" failed: {e}'}
 
     if list_resp.get('success'):
         existing_descriptors = list_resp.get('data', {}).get('descriptors', [])
@@ -268,11 +270,11 @@ def rpc_add_pubkey(
             if pubkey_hex in existing_desc and entry.get('next', 0) == 0:
                 return {
                     'success': False,
-                    'data': f"Public key {pubkey_hex} is already imported as a watch-only descriptor."
+                    'data': f'Public key {pubkey_hex} is already imported as a watch-only descriptor.'
                 }
     else:
         error_msg = list_resp.get('data', '')
-        return {'success': False, 'data': f"'listdescriptors' failed: {error_msg}"}
+        return {'success': False, 'data': f'"listdescriptors" failed: {error_msg}'}
     
     descriptor_entry = {
         'desc': descriptor_with_checksum,
@@ -292,13 +294,14 @@ def rpc_add_pubkey(
             params=[[descriptor_entry]]
         )
     except Exception as e:
-        return {'success': False, 'data': f"RPC call failed: {e}"}
+        return {'success': False, 'data': f'RPC call failed: {e}'}
 
     if resp.get('success'):
         return {'success': True, 'data': resp.get('data')}
     else:
         error_msg = resp.get('data', '')
         return {'success': False, 'data': error_msg}
+    
 
 #############################################
 # Get Address Balance and Transaction Details
@@ -347,7 +350,7 @@ def rpc_scan_address_utxos(
             params=['start', [f"addr({address})"]]
         )
     except Exception as e:
-        return {'success': False, 'data': f"RPC call 'scantxoutset' failed: {e}"}
+        return {'success': False, 'data': f'RPC call "scantxoutset" failed: {e}'}
 
     if not resp.get('success'):
         return resp
@@ -367,7 +370,7 @@ def rpc_scan_address_utxos(
         except InvalidOperation:
             return {
                 'success': False,
-                'data': f"Invalid amount value found in UTXO: {u.get('amount')}"
+                'data': f'Invalid amount value found in UTXO: {u.get("amount")}'
             }
 
     return {
@@ -401,7 +404,7 @@ def rpc_get_transaction_details(
             params=[txid, True]  
         )
     except Exception as e:
-        return {'success': False, 'data': f"RPC call 'getrawtransaction' failed: {e}"}
+        return {'success': False, 'data': f'RPC call "getrawtransaction" failed: {e}'}
 
     if not resp.get('success'):
         return resp
