@@ -4,21 +4,69 @@ import tkinter as tk
 from tkinter import scrolledtext, messagebox
 import threading
 import base64
+import logging
+import re
 import master_key
 import rpc_calls
+
+
+#############
+# Filter Logs 
+#############
+def setup_logging():
+    logging.basicConfig(
+        format='%(asctime)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        level=logging.INFO
+    )
+    
+    class SensitiveDataFilter(logging.Filter):
+        SENSITIVE_FIELDS = {'username', 'password', 'credentials', 'encoded', 'auth_header', 'pubkey_hex', 'address', 'address_textbox_content', 'addr', 'tweaked_privkey', 'tweaked_pubkey', 'self.rpc_username', 'self.rpc_auth_header', 'self.content_key_address', 'Address', 'Private Key', 'Public Key'}
+
+        def __init__(self):
+            super().__init__()
+            fields_alt = "|".join(re.escape(f) for f in self.SENSITIVE_FIELDS)
+            self._pattern = re.compile(
+                rf'(?P<key>("?{fields_alt}"?)\s*[:=]\s*)'
+                rf'(?P<sep>["\']?\$?)'
+                rf'(?P<value>[^"\',\s}}\]]+)',
+                re.IGNORECASE,
+            )
+
+        def filter(self, record: logging.LogRecord) -> bool:
+            msg = record.getMessage()
+            msg = self._pattern.sub(
+                lambda m: f'{m.group("key")}{m.group("sep")}***',
+                msg,
+            )
+            record.msg = msg
+            record.args = ()
+            return True
+
+    root_logger = logging.getLogger()
+    if not any(isinstance(f, SensitiveDataFilter) for f in root_logger.filters):
+        root_logger.addFilter(SensitiveDataFilter())
+
+setup_logging()
 
 
 class Home():
     def __init__(self, root):
         self.root = root
         self.wallet_name = 'watch_only_wallet'
-        self.add_default_text = 'Enter Bitcoin Public Key'
-        self.check_default_text = 'Enter Bitcoin Address' 
+        self.add_default_text = 'Enter Public Key'
+        self.check_default_text = 'Enter Address' 
         self.rpc_host = '127.0.0.1'
         self.rpc_port = 48332
+        self.explorer_log_user = None 
+        self.explorer_log_pass = None 
+        self.explorer_add_pubkey_ent = None
+        self.explorer_check_address_ent = None        
         self.rpc_username = None
         self.rpc_auth_header = None
+        self.content_key_address = None
         self.root.protocol('WM_DELETE_WINDOW', self.on_close)       
+
 
         ##############
         # Main Widgets
@@ -58,6 +106,7 @@ class Home():
         self.main_privacy_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_privacy_click(), text= 'FAQ', bd=2.5, bg='#4f697f', fg='white', width=4, font=('Segoe', 9, 'bold'))
         self.main_privacy_button.grid(row=1, column=7) 
 
+
         ##############
         # Home Widgets
         ##############
@@ -68,6 +117,7 @@ class Home():
         # Home Label1
         self.home_win_label = tk.Label(self.home_outer_frame, bg='#414850', fg='#00BFFF', text='Novel Bitcoin Payment Service\nis\nyour very own Bitcoin Payment Service.', font=('Segoe', 15, 'bold italic'))
         self.home_win_label.pack(side='top', pady=100)
+
         
         ##################
         # Explorer Widgets
@@ -79,7 +129,7 @@ class Home():
 
         # Explorer Label Frame 
         self.explorer_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
-        self.explorer_frame.pack(side='top')
+        self.explorer_frame.pack(pady=10, side='top')
        
         # Explorer Label
         self.explorer_label = tk.Label(self.explorer_frame, bg='#414850', fg='white', text='B i t c o i n   E x p l o r e r', font=('Segoe', 10, 'bold'))
@@ -87,49 +137,45 @@ class Home():
         
         # Explorer Login
         self.explorer_log_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
-        self.explorer_log_frame.pack(pady=1, padx=3, fill=tk.X)
-        self.explorer_log_user = tk.Entry(self.explorer_log_frame, width=14, font=('Arial', 9))
+        self.explorer_log_frame.pack(padx=3, fill=tk.X)
+        self.explorer_log_user = tk.Entry(self.explorer_log_frame, bd=2.5, width=14, font=('Arial', 9))
         self.explorer_log_user.insert(0, 'Enter Node User')
-        self.explorer_log_user.pack(side=tk.LEFT, padx=(6, 1), fill=tk.BOTH)
+        self.explorer_log_user.pack(side=tk.LEFT, padx=(6, 0), pady=(0, 1), fill=tk.BOTH)
         self.explorer_log_user.bind('<FocusIn>', self.user_focus_in)
         self.explorer_log_user.bind('<FocusOut>', self.user_focus_out)
-        self.explorer_log_pass = tk.Entry(self.explorer_log_frame, width=14, font=('Arial', 9))
+        self.explorer_log_pass = tk.Entry(self.explorer_log_frame, bd=2.5, width=14, font=('Arial', 9))
         self.explorer_log_pass.insert(0, 'Enter Node PWD')
         self.explorer_log_pass.bind('<FocusIn>', self.pass_focus_in)
         self.explorer_log_pass.bind('<FocusOut>', self.pass_focus_out)
-        self.explorer_log_pass.pack(side=tk.LEFT, padx=(0, 2), fill=tk.BOTH)
-        self.explorer_log_connect_btn = tk.Button(self.explorer_log_frame, bd=1.5, width=27, command=self.connect_click, text='Connect to Local Bitcoin Node', bg='#4f697f', fg='#f7931a', font=('Arial', 9))
+        self.explorer_log_pass.pack(side=tk.LEFT, pady=(0, 1), fill=tk.BOTH)
+        self.explorer_log_connect_btn = tk.Button(self.explorer_log_frame, bd=2.5, width=24, command=self.connect_click, text='Connect to Local Bitcoin Node', bg='#4f697f', fg='#f7931a', font=('Arial', 9))
         self.explorer_log_connect_btn.pack(side=tk.LEFT, padx=(0, 1), fill=tk.BOTH)
-        self.explorer_log_wallet_btn = tk.Button(self.explorer_log_frame, bd=1.5, width=19, state='disable', command=self.load_wallet_click, text='Load Watch-Only Wallet', bg='#4f697f', fg='#f7931a', font=('Arial', 9))
-        self.explorer_log_wallet_btn.pack(side=tk.LEFT, padx=(0, 6), fill=tk.BOTH)
-        
-        # Explorer Add Public Key
-        self.explorer_add_pubkey_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
-        self.explorer_add_pubkey_frame.pack(padx=3, fill=tk.X)
-        self.explorer_add_pubkey_ent = tk.Entry(self.explorer_add_pubkey_frame, justify="center", font=('Arial', 9), width=60)
-        self.explorer_add_pubkey_ent.insert(0, self.add_default_text)
-        self.explorer_add_pubkey_ent.pack(side=tk.LEFT, padx=(6, 1), pady=(0, 1), fill=tk.BOTH)
-        self.explorer_add_pubkey_ent.config(state='disabled')
-        self.explorer_add_pubkey_ent.bind('<FocusIn>', self.on_entry_focus)
-        self.explorer_add_pubkey_btn = tk.Button(self.explorer_add_pubkey_frame, bd=1.5, state='disabled', text='Add to Watch-Only Wallet', command=self.add_pubkey_clicked, bg='#4f697f', fg='#f7931a', font=('Arial', 9))
-        self.explorer_add_pubkey_btn.pack(side=tk.LEFT, padx=(0, 6), fill=tk.Y)
+        self.explorer_log_wallet_btn = tk.Button(self.explorer_log_frame, bd=2.5, width=19, state='disable', command=self.load_wallet_click, text='Load Watch-Only Wallet', bg='#4f697f', fg='#f7931a', font=('Arial', 9))
+        self.explorer_log_wallet_btn.pack(side=tk.LEFT, padx=(0, 7), fill=tk.BOTH)
         
         # Explorer Check Balance, Transaction & Messages
         self.explorer_check_frame = tk.Frame(self.explorer_outer_frame, bg='#414850')
         self.explorer_check_frame.pack(padx=3, fill=tk.X)
-        self.explorer_check_address_ent = tk.Entry(self.explorer_check_frame, justify="center", font=('Arial', 9), width=31)
+        self.explorer_add_pubkey_ent = tk.Entry(self.explorer_check_frame, justify="center", bd=2.5, font=('Arial', 9), width=14)
+        self.explorer_add_pubkey_ent.insert(0, self.add_default_text)
+        self.explorer_add_pubkey_ent.pack(side=tk.LEFT, padx=(6, 0), pady=(0, 1), fill=tk.BOTH)
+        self.explorer_add_pubkey_ent.config(state='disabled')
+        self.explorer_add_pubkey_ent.bind('<FocusIn>', self.on_entry_focus)
+        self.explorer_add_pubkey_btn = tk.Button(self.explorer_check_frame, bd=2.5, state='disabled', text='Add to Watch-Only', command=self.add_pubkey_clicked, bg='#4f697f', fg='#f7931a', font=('Arial', 9))
+        self.explorer_add_pubkey_btn.pack(side=tk.LEFT, fill=tk.Y)
+        self.explorer_check_address_ent = tk.Entry(self.explorer_check_frame, bd=2.5, justify="center", font=('Arial', 9), width=13)
         self.explorer_check_address_ent.insert(0, self.check_default_text)        
-        self.explorer_check_address_ent.pack(side=tk.LEFT, padx=(6, 1), pady=(0, 1), fill=tk.BOTH)
+        self.explorer_check_address_ent.pack(side=tk.LEFT, pady=(0, 1), fill=tk.BOTH)
         self.explorer_check_address_ent.config(state='disabled')
         self.explorer_check_address_ent.bind('<FocusIn>', self.on_entry_focus)
-        self.explorer_check_balance_tx_btn = tk.Button(self.explorer_check_frame, bd=1.5, state='disabled', text='Check Address Balance & Transactions', command=self.check_balance_clicked, bg='#4f697f', fg='#f7931a', font=('Arial', 9))
+        self.explorer_check_balance_tx_btn = tk.Button(self.explorer_check_frame, bd=2.5, state='disabled', text='View Balance & Tx', command=self.check_balance_clicked, bg='#4f697f', fg='#f7931a', font=('Arial', 9))
         self.explorer_check_balance_tx_btn.pack(side=tk.LEFT, fill=tk.Y)
-        self.explorer_check_messages_btn = tk.Button(self.explorer_check_frame, bd=1.5, state='disabled', text='Check Messages', bg='#4f697f', fg='#f7931a', font=('Arial', 9))
-        self.explorer_check_messages_btn.pack(side=tk.LEFT, padx=(0, 6), fill=tk.Y)
+        self.explorer_check_messages_btn = tk.Button(self.explorer_check_frame, bd=2.5, state='disabled', text=' View Messages', bg='#4f697f', fg='#f7931a', font=('Arial', 9))
+        self.explorer_check_messages_btn.pack(side=tk.LEFT, padx=(0,5), fill=tk.Y)
         
         # Explorer Textbox
         self.results_label = tk.Label(self.explorer_outer_frame, text='Results/Notifications', anchor="w", bg='#414850', fg='white', font=("Arial", 9))
-        self.results_label.pack(fill='x', padx=6, pady=7)
+        self.results_label.pack(fill='x', padx=6, pady=11)
         self.explorer_textbox_frame = tk.Frame(self.explorer_outer_frame)
         self.explorer_textbox_frame.pack() 
         self.explorer_textbox = tk.Text(self.explorer_textbox_frame, bg='#414850', fg='white', font=("Segoe", 11))
@@ -142,6 +188,7 @@ class Home():
         self.nov_logo = tk.PhotoImage(file='nov_logo.png')
         self.explorer_textbox.image_create('end', image=self.nov_logo)
         self.explorer_textbox.image = self.nov_logo
+
 
         #################
         # Address Widgets
@@ -157,14 +204,14 @@ class Home():
 
         # Address Label
         self.address_win_label = tk.Label(self.address_win_label_frame, bg='#414850', fg='white', text='Create Bitcoin Address + Public Key + Private Key', font=('Segoe', 11, 'bold'))
-        self.address_win_label.pack(side='left', pady=10)
+        self.address_win_label.pack(side='left', pady=30)
 
         # Address Notice Frame
         self.address_win_notice_frame = tk.Frame(self.create_address_outer_frame, bg='#414850')
         self.address_win_notice_frame.pack(side='top', pady=3)
 
         # Address Notice
-        self.address_win_notice = tk.Label(self.address_win_notice_frame, bg='#414850', fg='white', text='To create Bitcoin Address + Public Key + Private Key:\n1. Press Generate.\n2. Scroll down to view Public Key and Private Key.\n3. Write down the Address and Key Pair (Public and Private keys) and keep it in a safe place\nor copy it to a safe digital storage.\nAddress and Key Pair texts will self-distruct after 10 minutes.\nIn case you run out of time, should you choose the writing option,\ngenerate another Andress + Key Pair by repeating the process.', font=('Segoe', 8))
+        self.address_win_notice = tk.Label(self.address_win_notice_frame, bg='#414850', fg='white', text='To create Bitcoin Address + Public Key + Private Key:\n1. Click Generate.\n2. Scroll down to view keys.\n3. Copy data by highlighting text and pressing Ctrl+C. Save it to a secure digital location.\n Data will self-destruct after 3 seconds. If you run out of time, click Generate button again.', font=('Segoe', 9))
         self.address_win_notice.pack(side='left')
 
         # Address Label + Button Frame
@@ -176,11 +223,11 @@ class Home():
         self.create_address_text_frame.pack()
 
         # Address Copy Clear Frame
-        self.create_address_copy_clear_frame = tk.Frame(self.create_address_outer_frame, bg='#414850')
-        self.create_address_copy_clear_frame.pack()
+        self.create_address_clear_frame = tk.Frame(self.create_address_outer_frame, bg='#414850')
+        self.create_address_clear_frame.pack()
 
         # Address Button
-        self.create_address_key_button = tk.Button(self.create_address_label_button_frame, text='G e n e r a t e', borderwidth=3, fg='white', bg='#4f697f', height=1, width=10, font=('Segoe', 10), command=lambda: [self.create_address_show_delete_keyadd(), self.address_copy_button_enable(), self.address_clear_button_enable()])
+        self.create_address_key_button = tk.Button(self.create_address_label_button_frame, text='G e n e r a t e', borderwidth=3, fg='white', bg='#4f697f', height=1, width=10, font=('Segoe', 10), command=lambda: [self.create_address_show_delete_keyadd(), self.address_clear_button_enable()])
         self.create_address_key_button.bind('<Enter>', lambda event, h=self.create_address_key_button: h.configure())
         self.create_address_key_button.bind('<Leave>', lambda event, h=self.create_address_key_button: h.configure())
         self.create_address_key_button.pack(pady=10)
@@ -193,17 +240,12 @@ class Home():
         self.create_address_key_text.bind('<Down>', self.adress_move_down)
         self.create_address_key_text.pack(pady=(0, 10))
         
-        # Address Copy Button
-        self.create_address_copy_button = tk.Button(self.create_address_copy_clear_frame, state='disabled', text= 'C o p y',  borderwidth=3, fg='white', bg='#4f697f', height=1, width=7, font=('Segoe', 10), command= lambda: self.is_address_copy_clicked())                           
-        self.create_address_copy_button.bind('<Enter>', lambda event, h=self.create_address_copy_button: h.configure())
-        self.create_address_copy_button.bind('<Leave>', lambda event, h=self.create_address_copy_button: h.configure())
-        self.create_address_copy_button.grid(row=0, column=0,pady=(0, 20))
-      
         # Address Clear Button
-        self.create_address_clear_button = tk.Button(self.create_address_copy_clear_frame, state='disabled', text= "C l e a r",  borderwidth=3, fg='white', bg='#4f697f', height=1, width=7, font=('Segoe', 10), command= lambda: [self.clear_address_text(), self.address_copy_button_disable(), self.address_clear_button_disable()])                           
+        self.create_address_clear_button = tk.Button(self.create_address_clear_frame, state='disabled', text= "C l e a r",  borderwidth=3, fg='white', bg='#4f697f', height=1, width=7, font=('Segoe', 10), command= lambda: [self.clear_address_text(), self.address_clear_button_disable()])                           
         self.create_address_clear_button.bind('<Enter>', lambda event, h=self.create_address_clear_button: h.configure())
         self.create_address_clear_button.bind('<Leave>', lambda event, h=self.create_address_clear_button: h.configure())
         self.create_address_clear_button.grid(row=0, column=1,padx=20, pady=(0, 20))
+
                 
         #######################
         # Privacy-Terms Widgets
@@ -226,6 +268,7 @@ class Home():
         self.privacy_textbox.bind('<Up>', self.privacy_move_up)
         self.privacy_textbox.bind('<Down>', self.privacy_move_down)
         self.privacy_textbox.pack(pady=(25, 25), padx=10, anchor='w')       
+
     
     ################
     # Home Functions
@@ -272,6 +315,7 @@ class Home():
         self.main_home_button.config(state='normal')
         self.main_home_button.config(fg='#f7931a')   
 
+
     ####################
     # Explorer Functions
     ####################
@@ -316,7 +360,6 @@ class Home():
         if self.explorer_log_user.get() == 'Enter Node User':
             self.explorer_log_user.delete(0, 'end') 
             self.explorer_log_user.insert(0, '') 
-            # Hides username
             self.explorer_log_user.config(show='*')
 
 
@@ -327,9 +370,8 @@ class Home():
 
     def pass_focus_in(self, event):
         if self.explorer_log_pass.get() == 'Enter Node PWD':
-            self.explorer_log_pass.delete(0, 'end')  # Delete all the text in the entry
+            self.explorer_log_pass.delete(0, 'end')  
             self.explorer_log_pass.insert(0, '')
-            # Hides password 
             self.explorer_log_pass.config(show='*')
 
 
@@ -337,11 +379,12 @@ class Home():
         if self.explorer_log_pass.get() == '':
             self.explorer_log_pass.insert(0, 'Enter Node PWD')
             self.explorer_log_pass.config(show='')
-
+    
 
     def validate_credential_inputs(self):
         username = self.explorer_log_user.get().strip()
         password = self.explorer_log_pass.get().strip()
+        # logging.info(f'username={username}, password={password}')
 
         if not username:
             return False, 'Username cannot be empty.'
@@ -349,7 +392,7 @@ class Home():
             return False, 'Password cannot be empty.'
         
         return True, (username, password)
-    
+
     
     def connect_click(self):
         is_valid, result = self.validate_credential_inputs()
@@ -359,13 +402,16 @@ class Home():
 
         username, password = result
         credentials = f'{username}:{password}'
-        encoded = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
-        auth_header = f'Basic {encoded}'
+        # logging.info(f"credentials={credentials}")
 
-        # Store persistent Bitcoin Node access data. Password not Included. 
-        # If user closes the app, persistent data is lost. User has to login next time.
+        encoded = base64.b64encode(credentials.encode('utf-8')).decode('utf-8')
+        # logging.info(f"encoded={encoded}")
+        
+        auth_header = f'Basic {encoded}'
+        # logging.info(f"auth_header={encoded}")
+
         self.rpc_username = username
-        self.rpc_auth_header = auth_header  # <-- Store this instead of password
+        self.rpc_auth_header = auth_header
         del password
         self.root.update_idletasks()
 
@@ -378,7 +424,6 @@ class Home():
         if result_blockchain_info['success']:
             self.display_result(result_blockchain_info['data'])
             self.explorer_log_user.delete(0, tk.END)
-            # Immediate Clearance: As soon as the user clicks “Connect”, the password disappears from the screen.
             self.explorer_log_pass.delete(0, tk.END)
             self.explorer_log_user.config(state='disabled')
             self.explorer_log_pass.config(state='disabled')
@@ -420,7 +465,9 @@ class Home():
     
    
     def add_pubkey_clicked(self):
-        self.pubkey_hex = self.explorer_add_pubkey_ent.get().strip()
+        pubkey_hex = self.explorer_add_pubkey_ent.get().strip()
+        # logging.info(f"pubkey_hex={pubkey_hex}")
+
         self.explorer_add_pubkey_ent.delete(0, 'end') 
         self.explorer_add_pubkey_ent.insert(0, self.add_default_text)
         self.explorer_add_pubkey_ent.config(bg='light gray')
@@ -431,7 +478,7 @@ class Home():
                 self.rpc_host,
                 self.rpc_port,
                 self.rpc_auth_header,
-                self.pubkey_hex,
+                pubkey_hex,
                 label='#1'
             )
 
@@ -464,6 +511,7 @@ class Home():
             self.explorer_check_balance_tx_btn.config(state='normal')
             self.explorer_add_pubkey_ent.config(bg='white')
 
+
     ##############################
     # Check Balance + Transactions
     ##############################
@@ -483,32 +531,32 @@ class Home():
                 full_output = ''
 
                 summary = (
-                    f"Address: {data['address']}\n"
-                    f"Total Balance: {data['total_balance']} tBTC\n"
-                    f"Confirmed Transactions Found: {data['confirmed_transactions_found']}\n"
-                    f"Latest confirmed transactions are listed below: {len(data['transactions'])}\n"
+                    f'Address: {data['address']}\n'
+                    f'Total Balance: {data['total_balance']} tBTC\n'
+                    f'Confirmed Transactions Found: {data['confirmed_transactions_found']}\n'
+                    f'Latest confirmed transactions are listed below: {len(data['transactions'])}\n'
                 )
                 full_output += summary + '\n'
 
                 for i, tx in enumerate(data['transactions'], start=1):
                     tx_info = (
-                        f"--- Transaction #{i} ---\n"
-                        f"TXID: {tx['txid']}\n"
-                        f"Confirmations: {tx.get('confirmations')}\n"
-                        f"Time: {tx.get('time')}\n"
-                        f"Inputs ({len(tx['inputs'])}):\n"
+                        f'--- Transaction #{i} ---\n'
+                        f'TXID: {tx["txid"]}\n'
+                        f'Confirmations: {tx.get('confirmations')}\n'
+                        f'Time: {tx.get("time")}\n'
+                        f'Inputs ({len(tx["inputs"])}):\n'
                     )
                     for j, vin in enumerate(tx['inputs']):
                         script_sig_preview = vin['scriptSig'][:64] + "..." if len(vin['scriptSig']) > 64 else vin['scriptSig']
                         tx_info += (
-                            f"  [{j}] txid={vin['txid']}, vout={vin['vout']}, "
-                            f"scriptSig_hex={script_sig_preview}\n"
+                            f'  [{j}] txid={vin["txid"]}, vout={vin["vout"]}, '
+                            f'scriptSig_hex={script_sig_preview}\n'
                         )
 
-                    tx_info += f"Outputs ({len(tx['outputs'])}):\n"
+                    tx_info += f'Outputs ({len(tx["outputs"])}):\n'
                     for j, vout in enumerate(tx['outputs']):
                         tx_info += (
-                            f"  [{j}] value={vout['value']} tBTC\n"
+                            f'  [{j}] value={vout["value"]} tBTC\n'
                         )
                     
                     full_output += tx_info + '\n'
@@ -517,10 +565,10 @@ class Home():
 
             else:
                 error_msg = result_balance_transactions['data'] or 'Unknown error'
-                self.root.after(0, self.display_result, f"\nFailed to scan address: {error_msg}")
+                self.root.after(0, self.display_result, f'\nFailed to scan address: {error_msg}. Please try again later.')
 
         except Exception as e:
-            gen_error_msg = f"Error: {e}"
+            gen_error_msg = f'Error: {e}'
             self.root.after(0, self.display_result, gen_error_msg)
 
         finally:
@@ -530,13 +578,13 @@ class Home():
 
     def check_balance_clicked(self) -> None:
         address = self.explorer_check_address_ent.get().strip()
+        # logging.info(f'address={address}')
+
         self.explorer_check_address_ent.delete(0, 'end')
-        self.explorer_check_address_ent.insert(0, self.add_default_text)
+        self.explorer_check_address_ent.insert(0, self.check_default_text)
         self.explorer_check_address_ent.config(bg='light gray')
         self.explorer_check_balance_tx_btn.config(state='disabled')
-
         self.display_result('Processing ...')
-
         thread = threading.Thread(target=self.run_rpc_in_thread, args=(address,), daemon=True)
         thread.start()
 
@@ -544,32 +592,24 @@ class Home():
     ###################
     # Address Functions
     ###################  
-    def create_address_mouse_copy(self, event):
-        if event.state == 4 and event.keysym == 'c':
-            address_textbox_content = self.create_address_key_text.selection_get()
-            self.create_address_outer_frame.clipboard_clear()
-            self.create_address_outer_frame.clipboard_append(address_textbox_content)
-            return 'break'
-        elif event.state == 4 and event.keysym == 'v':
-            self.create_address_key_text.insert('end', self.create_address_outer_frame.selection_get(selection='CLIPBOARD'))
-            return 'break'
-        else:
-            return 'break'        
-    
-
     def create_address_disable_click_master(self, event):
         if not self.create_address_key_text.get('1.0', 'end-1c'): 
             return 'break'    
 
 
     def create_address_key_address(self): 
+        self.clear_address_text()
         try:
             addr, tweaked_privkey, tweaked_pubkey = master_key.iden()
-            self.content_key_address = f"\nBitcoin Address: {addr} \n\n\nPrivate Key: {tweaked_privkey}\n\n\nPublic Key: {tweaked_pubkey}" 
+            # logging.info(f'addr={addr}, tweaked_privkey={tweaked_privkey}, tweaked_pubkey={tweaked_pubkey}')
+            
+            self.content_key_address = f'\nBitcoin Address: {addr} \n\n\nPrivate Key: {tweaked_privkey}\n\n\nPublic Key: {tweaked_pubkey}' 
+            # logging.info(f'self.content_key_address={self.content_key_address}')
+
             return self.content_key_address
         
         except Exception as e:
-            error_message = f"Error occurred: {str(e)}"
+            error_message = f'Error occurred: {str(e)}'
             self.create_address_key_text.delete('1.0','end')
             self.create_address_key_text.insert(tk.END, error_message)
         
@@ -593,37 +633,24 @@ class Home():
         self.create_address_key_text.tag_configure('center', justify='center')  
         self.create_address_key_text.insert(tk.INSERT, self.key_add)
         self.create_address_key_text.tag_add('center', '1.0', 'end')
-        self.create_address_key_text.after(300000, self.create_address_delete_keyadd)    
+        self.create_address_key_text.after(3000, self.create_address_delete_keyadd)    
         self.create_address_key_button.update()  
     
 
-    def adress_move_up(event):
-        self.create_address_key_text.mark_set('insert', 'insert-1lines') # type: ignore
-        self.create_address_key_text.see('insert') # type: ignore
+    def adress_move_up(self, event):
+        self.create_address_key_text.mark_set('insert', 'insert-1lines') 
+        self.create_address_key_text.see('insert') 
         return 'break'
 
 
-    def adress_move_down(event):
-        self.create_address_key_text.mark_set('insert', 'insert+1lines') # type: ignore
-        self.create_address_key_text.see('insert') # type: ignore
+    def adress_move_down(self, event):
+        self.create_address_key_text.mark_set('insert', 'insert+1lines') 
+        self.create_address_key_text.see('insert') 
         return 'break'  
     
 
-    def is_address_copy_clicked(self):
-        self.create_address_text_frame.clipboard_clear()
-        self.create_address_text_frame.clipboard_append(self.create_address_key_text.get("1.0", tk.END))           
-
-
-    def address_copy_button_enable(self):
-        self.create_address_copy_button.config(state='normal')
-
-
     def address_clear_button_enable(self):
         self.create_address_clear_button.config(state='normal')
-        
-
-    def address_copy_button_disable(self):
-        self.create_address_copy_button.config(state='disabled')
 
 
     def address_clear_button_disable(self):
@@ -633,30 +660,35 @@ class Home():
     def clear_address_text(self):
         self.create_address_key_text.delete('1.0', 'end')    
 
+
     ###################
     # Privacy Functions
     ###################
-    def privacy_move_up(event):
-        self.privacy_textbox.mark_set('insert', 'insert-1lines') # type: ignore
-        self.privacy_textbox.see('insert') # type: ignore
+    def privacy_move_up(self, event):
+        self.privacy_textbox.mark_set('insert', 'insert-1lines')
+        self.privacy_textbox.see('insert') 
         return 'break'
 
 
-    def privacy_move_down(event):
-        self.privacy_textbox.mark_set('insert', 'insert+1lines') # type: ignore
-        self.privacy_textbox.see('insert') # type: ignore
+    def privacy_move_down(self, event):
+        self.privacy_textbox.mark_set('insert', 'insert+1lines') 
+        self.privacy_textbox.see('insert') 
         return 'break'
+    
 
-    ###################
-    # Clean Up on Close
-    ###################
+    ##############
+    # Data Removal
+    ##############
     def on_close(self):
-        # Clear sensitive data
-        self.rpc_auth_header = None
-        self.rpc_host = None
-        self.rpc_port = None
+        self.explorer_log_user = None 
+        self.explorer_log_pass = None 
+        self.explorer_add_pubkey_ent = None
+        self.explorer_check_address_ent = None        
         self.rpc_username = None
+        self.rpc_auth_header = None
+        self.content_key_address = None    
         self.root.destroy()
+        
 
 #################
 # Run Application
