@@ -9,6 +9,7 @@ from typing import Any, Dict, Optional, List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
+
 def call_rpc(
     host: str,
     port: int,
@@ -138,209 +139,150 @@ def call_rpc(
         }
 
 
-#####################
+#################
 # Blockchain Info
-#####################
-def get_blockchain_info(host, port, auth_header) -> Dict[str, Any]:
+#################
+def get_blockchain_info_v1(host, port, auth_header) -> Dict[str, Any]:
     resp = call_rpc(host, port, auth_header, 'getblockchaininfo')
 
     if not resp['success']:
         return resp
 
-    formatted_json = json.dumps(resp['data'], indent=4, separators=(',', ': '))
     return {
         'success': True,
-        'data': f'Connection Status: Successfully connected to Bitcoin Testnet4 node.\n✅ "initialblockdownload: false" means the node is fully synchronized with the blockchain\n❎ "initialblockdownload: true" means the node is not fully synchronized with the blockchain\n\nBlockchain Info:\n{formatted_json}\n\n',
+        'data': f'✅ Connection Status: Successfully connected to Bitcoin Testnet4 node.'
     }
 
 
-#######################
-# Create or Load Wallet
-#######################
-def create_or_load_wallet(
+def get_blockchain_info_v2(host, port, auth_header) -> Dict[str, Any]:
+    try:
+        resp = call_rpc(host, port, auth_header, 'getblockchaininfo')
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e),
+            'is_synced': None,
+        }
+
+    if not resp.get('success'):
+        return resp
+
+    data = resp.get('data', {})
+    if not isinstance(data, dict):
+        return {
+            'success': False,
+            'error': 'Unexpected response format: "data" is not a dict',
+            'is_synced': None,
+        }
+
+    initial_block_download: Optional[bool] = data.get('initialblockdownload')
+    is_synced = initial_block_download is False
+    status_code = (
+        'SYNCED' if is_synced
+        else 'DOWNLOADING' if initial_block_download is True
+        else 'UNKNOWN'
+    )
+
+    return {
+        'success': True,
+        'is_synced': is_synced,
+        'status_code': status_code,
+        'sync_details': {
+            'initialblockdownload': initial_block_download,
+        },
+    }
+
+
+####################
+# Address Validation
+####################
+def validate_address(
     host: str,
     port: int,
     auth_header: str,
-    wallet_name: str
+    address: str
 ) -> Dict[str, Any]:
-    resp = call_rpc(host, port, auth_header, 'listwallets')
-    if not resp.get('success'):
+    resp = call_rpc(host, port, auth_header, 'validateaddress', [address])
+
+    if not resp['success']:
         return resp
 
-    wallets = resp.get('data', [])
-    if wallet_name in wallets:
-        return {'success': True, 'data': wallet_name}
+    result = resp['data']
 
-    resp = call_rpc(
-        host,
-        port,
-        auth_header,
-        'createwallet',
-        [
-            wallet_name,
-            True, 
-            False,
-            '',    
-            False  
-        ]
-    )
+    is_valid = result.get('isvalid', False)
 
-    if resp.get('success'):
-        return resp
+    if not is_valid:
+        return {
+            'success': False,
+            'data': f'Address "{address}" is not a valid Bitcoin Testnet Taproot (Bech32m) address.'
+        }
 
-    error_msg = resp.get('data', '')
-    if 'Database already exist' in error_msg or '-18' in error_msg:
-        load_resp = call_rpc(
-            host,
-            port,
-            auth_header,
-            'loadwallet',
-            [wallet_name]
-        )
-        if load_resp.get('success'):
-            return {'success': True, 'data': wallet_name}
-        else:
-            return load_resp
+    is_witness = result.get('iswitness', False)
+    witness_version = result.get('witness_version')
+    witness_program = result.get('witness_program', '')
 
-    return resp
-
-
-################
-# Add Public Key
-################
-def get_descriptor_with_checksum(host, port, auth_header, descriptor):
-    resp = call_rpc(
-        host=host,
-        port=port,
-        auth_header=auth_header,
-        method='getdescriptorinfo',
-        params=[descriptor]
-    )
-    if not resp.get('success'):
-        raise RuntimeError(f'getdescriptorinfo failed: {resp.get("data")}')
-    info = resp['data']
-    return info['descriptor']
-
-
-def rpc_add_pubkey(
-    host: str,
-    port: int,
-    auth_header: str,    
-    pubkey_hex: str,
-    label: str = '#1',
-    timestamp: str | int = 'now'
-) -> Dict[str, Any]:
-    if not isinstance(pubkey_hex, str) or not re.fullmatch(r'[0-9a-fA-F]+', pubkey_hex):
-        return {'success': False, 'data': 'Public key must be a valid hex string.'}
-
-    pubkey_len = len(pubkey_hex)
-    if pubkey_len != 64:
+    if not is_witness:
         return {
             'success': False,
             'data': (
-                f'Invalid public key length for Taproot. Expected 64 hex chars (32 bytes). '
-                f'Got {pubkey_len}.'
+                f'Address "{address}" is valid but NOT a SegWit (bech32/bech32m) address. '
+                f'Only Taproot (bech32m, tb1p...) addresses are allowed.'
             )
         }
 
-    base_descriptor = f"tr({pubkey_hex})"
+    if witness_version != 1:
+        return {
+            'success': False,
+            'data': (
+                f'Address "{address}" is a valid SegWit address but uses witness version '
+                f'{witness_version}. Only witness version 1 (Taproot, tb1p...) is allowed.'
+            )
+        }
 
-    try:
-        descriptor_with_checksum = get_descriptor_with_checksum(
-            host, port, auth_header, base_descriptor
+    if len(witness_program) != 64:
+        return {
+            'success': False,
+            'data': (
+                f'Address "{address}" has a witness program of length {len(witness_program)} hex chars '
+                f'({len(witness_program) // 2} bytes). Taproot requires a 32-byte witness program.'
+            )
+        }
+
+    if not address.lower().startswith('tb1p'):
+        return {
+            'success': False,
+            'data': (
+                f'Address "{address}" does not start with "tb1p". '
+                f'Only Testnet Taproot (bech32m) addresses are allowed.'
+            )
+        }
+
+    formatted_json = json.dumps(result, indent=4, separators=(',', ': '))
+
+    return {
+        'success': True,
+        'data': (
+            f'Address Validation Result:\n'
+            f'Address: {address}\n'
+            f'Valid: {is_valid}\n'
+            f'SegWit: {is_witness}\n'
+            f'Witness Version: {witness_version} (Taproot)\n'
+            f'Witness Program: {witness_program}\n'
+            f'ScriptPubKey: {result.get("scriptPubKey", "")}\n\n'
+            f'Full validateaddress response:\n{formatted_json}\n'
         )
-    except Exception as e:
-        return {'success': False, 'data': f'Failed to compute descriptor checksum: {e}'}
-
-    try:
-        list_resp = call_rpc(
-            host=host,
-            port=port,
-            auth_header=auth_header,
-            method='listdescriptors',
-            params=[]
-        )
-    except Exception as e:
-        return {'success': False, 'data': f'RPC call "listdescriptors" failed: {e}'}
-
-    if list_resp.get('success'):
-        existing_descriptors = list_resp.get('data', {}).get('descriptors', [])
-        for entry in existing_descriptors:
-            existing_desc = entry.get('desc', '')
-            if pubkey_hex in existing_desc and entry.get('next', 0) == 0:
-                return {
-                    'success': False,
-                    'data': f'Public key {pubkey_hex} is already imported as a watch-only descriptor.'
-                }
-    else:
-        error_msg = list_resp.get('data', '')
-        return {'success': False, 'data': f'"listdescriptors" failed: {error_msg}'}
-    
-    descriptor_entry = {
-        'desc': descriptor_with_checksum,
-        'active': False,
-        'internal': False,
-        'watchonly': True,
-        'label': label,
-        'timestamp': timestamp
     }
 
-    try:
-        resp = call_rpc(
-            host=host,
-            port=port,
-            auth_header=auth_header,
-            method='importdescriptors',
-            params=[[descriptor_entry]]
-        )
-    except Exception as e:
-        return {'success': False, 'data': f'RPC call failed: {e}'}
 
-    if resp.get('success'):
-        return {'success': True, 'data': resp.get('data')}
-    else:
-        error_msg = resp.get('data', '')
-        return {'success': False, 'data': error_msg}
-    
-
-#############################################
-# Get Address Balance and Transaction Details
-#############################################
-def _is_valid_taproot_testnet_address(address: str) -> bool:
-    if not isinstance(address, str):
-        return False
-
-    if len(address) < 42 or len(address) > 90:
-        return False
-
-    if not address.startswith('tb1p'):
-        return False
-
-    if not re.fullmatch(r'[a-z0-91]+', address):
-        return False
-
-    parts = address.split('1')
-    if len(parts) != 2 or not parts[0] or not parts[1]:
-        return False
-
-    return True
-
-
+##################################
+# Address Balance and Transactions
+##################################
 def rpc_scan_address_utxos(
     host: str,
     port: int,
     auth_header: str,
     address: str
 ) -> Dict[str, Any]:
-    if not _is_valid_taproot_testnet_address(address):
-        return {
-            'success': False,
-            'data': (
-                'Address is not a valid Testnet Taproot (tb1p...) address. '
-                'Only Testnet Taproot addresses are allowed.'
-            )
-        }
-
     try:
         resp = call_rpc(
             host=host,
@@ -435,14 +377,6 @@ def fetch_latest_balance_transactions(
     address: str,
     limit: int = 5
 ) -> Dict[str, Any]:
-    if not _is_valid_taproot_testnet_address(address):
-        return {
-            'success': False,
-            'data': (
-                'Address is not a valid Testnet Taproot (tb1p...) address. '
-                'Only Testnet Taproot addresses are allowed.'
-            )
-        }
 
     scan_res = rpc_scan_address_utxos(host, port, auth_header, address)
     if not scan_res['success']:
@@ -454,7 +388,8 @@ def fetch_latest_balance_transactions(
 
     txids = list({u['txid'] for u in unspents})
 
-    detailed_txs: List[Dict[str, Any]] = []
+    confirmed_txs: List[Dict[str, Any]] = []
+    unconfirmed_txs: List[Dict[str, Any]] = []
     seen_txids = set()
 
     def fetch_tx(txid: str):
@@ -474,7 +409,7 @@ def fetch_latest_balance_transactions(
                 txid, tx_res = result
 
                 if not tx_res['success']:
-                    detailed_txs.append({
+                    confirmed_txs.append({
                         'txid': txid,
                         'error': tx_res['data'],
                         'inputs': [],
@@ -484,8 +419,6 @@ def fetch_latest_balance_transactions(
 
                 tx = tx_res['data']
                 confirmations = tx.get('confirmations', 0)
-                if confirmations <= 0:
-                    continue
 
                 inputs = []
                 for vin in tx.get('vin', []):
@@ -495,17 +428,16 @@ def fetch_latest_balance_transactions(
                         'sequence': vin.get('sequence'),
                         'scriptSig': vin.get('scriptSig', {}).get('hex', ''),
                         'txinwitness': vin.get('txinwitness', [])
-                    })                
-                
+                    })
+
                 outputs = []
                 for i, vout in enumerate(tx.get('vout', [])):
                     outputs.append({
                         'index': i,
-                        'value': str(vout.get('value', '0'))                        
+                        'value': str(vout.get('value', '0'))
                     })
 
-                    
-                detailed_txs.append({
+                tx_entry = {
                     'txid': tx.get('txid'),
                     'blockheight': tx.get('blockheight'),
                     'confirmations': confirmations,
@@ -516,10 +448,18 @@ def fetch_latest_balance_transactions(
                     'weight': tx.get('weight'),
                     'version': tx.get('version'),
                     'locktime': tx.get('locktime'),
-                })
+                }
 
-    detailed_txs.sort(key=_normalize_tx_for_sorting, reverse=True)
-    latest_txs = detailed_txs[:limit]
+                if confirmations <= 0:
+                    unconfirmed_txs.append(tx_entry)
+                else:
+                    confirmed_txs.append(tx_entry)
+
+    confirmed_txs.sort(key=_normalize_tx_for_sorting, reverse=True)
+    latest_confirmed = confirmed_txs[:limit]
+
+    unconfirmed_txs.sort(key=_normalize_tx_for_sorting, reverse=True)
+    latest_unconfirmed = unconfirmed_txs[:limit]
 
     return {
         'success': True,
@@ -527,8 +467,10 @@ def fetch_latest_balance_transactions(
             'address': address,
             'total_balance': total_balance,
             'utxo_count': len(unspents),
-            'confirmed_transactions_found': len(detailed_txs),
-            'transactions': latest_txs,
+            'confirmed_transactions_found': len(confirmed_txs),
+            'unconfirmed_transactions_found': len(unconfirmed_txs),
+            'transactions': latest_confirmed,
+            'unconfirmed_transactions': latest_unconfirmed,
             'raw_unspents': unspents
         }
     }
