@@ -25,6 +25,7 @@ class Home():
         self.explorer_check_address_ent = None        
         self.rpc_username = None
         self.rpc_auth_header = None
+        self.root.protocol('WM_DELETE_WINDOW', self.on_close)
 
 
         ##############
