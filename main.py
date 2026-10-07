@@ -18,14 +18,24 @@ class Home():
     def __init__(self, root):
         self.root = root
         self.check_default_text = 'Enter Address'
+        self.sender_address_text = 'Sender Address'
+        self.recipient_address_text = 'Recipient Address'
+        self.recipient_amount_text = 'Amount to Recipient' 
+        self.recipient_message_text = 'Message to Recipient (Optional)'
+        self.send_textbox_text = "💡 Steps to Send Bitcoin\n\nNote: I'm in the process of developing a hardware prototype.\n\nI. Prerequisites:\n1. Ensure your computer is connected to the internet. This is only for validating recipient details. Signing will be done offline via external hardware.\n\n2. Open the Block Explorer Window.\n\n3. In the Block Explorer Window, log in with your node username and password. Authentication is handled via rpcauth.\n\n4. While still in the Block Explorer Window, click “Check Node Sync Status”.\n\n5. If the node is fully synced, click the “Send Bitcoin” button.\n\nII. Send Inputs Validation: Fill in all fields with the correct values, then click the “SEND” button."
         self.rpc_host = '127.0.0.1'
         self.rpc_port = 48332
         self.explorer_log_user = None 
         self.explorer_log_pass = None
-        self.explorer_check_address_ent = None        
+        self.explorer_check_address_ent = None
         self.rpc_username = None
         self.rpc_auth_header = None
-        self.root.protocol('WM_DELETE_WINDOW', self.on_close)
+        self.recipient_address_ent = None
+        self.send_amount_ent = None
+        self.send_message_ent = None
+        self.content_key_address = None
+        self.create_address_key_text = None
+        self.root.protocol('WM_DELETE_WINDOW', self.on_close)        
 
 
         ##############
@@ -47,19 +57,19 @@ class Home():
         self.main_logo_buttons_frame.pack(side='top')
 
         # Main Home Button
-        self.main_home_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_home_click(), state='disabled', text= 'Home', bd=4, bg='#4f697f', width=3, font=('Segoe', 9, 'bold'))
+        self.main_home_button = tk.Button(self.main_logo_buttons_frame, command=self.main_home_click, state='disabled', text= 'Home', bd=4, bg='#4f697f', width=3, font=('Segoe', 9, 'bold'))
         self.main_home_button.grid(row=1, column=2)
 
         # Main Explorer Button
-        self.main_explorer_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_explorer_click(), text= 'Block Explorer', bd=4, bg='#4f697f', fg='white', width=10, font=('Segoe', 9, 'bold'))
+        self.main_explorer_button = tk.Button(self.main_logo_buttons_frame, command=self.main_explorer_click, text= 'Block Explorer', bd=4, bg='#4f697f', fg='white', width=10, font=('Segoe', 9, 'bold'))
         self.main_explorer_button.grid(row=1, column=3)
         
         # Main Address Button
-        self.main_gen_address_button = tk.Button(self.main_logo_buttons_frame, command=lambda: self.main_gen_address_click(), text= 'Create Address + Key Pair', bd=4, bg='#4f697f', fg='white', width=20, font=('Segoe', 9, 'bold'))
+        self.main_gen_address_button = tk.Button(self.main_logo_buttons_frame, command=self.main_gen_address_click, text= 'Create Address + Key Pair', bd=4, bg='#4f697f', fg='white', width=20, font=('Segoe', 9, 'bold'))
         self.main_gen_address_button.grid(row=1, column=4)        
 
         # Main Send Button
-        self.main_send_button = tk.Button(self.main_logo_buttons_frame, state='disable', text= 'Send Bitcoin', bd=4, bg='#4f697f', fg='white', width=9, font=('Segoe', 9, 'bold'))
+        self.main_send_button = tk.Button(self.main_logo_buttons_frame, command=self.main_send_click, state='normal', text= 'Send Bitcoin', bd=4, bg='#4f697f', fg='white', width=9, font=('Segoe', 9, 'bold'))
         self.main_send_button.grid(row=1, column=6)
         
         # Main Reset Button
@@ -198,6 +208,61 @@ class Home():
         self.create_address_clear_button.bind('<Enter>', lambda event, h=self.create_address_clear_button: h.configure())
         self.create_address_clear_button.bind('<Leave>', lambda event, h=self.create_address_clear_button: h.configure())
         self.create_address_clear_button.grid(row=0, column=1,padx=20, pady=(0, 20))
+
+
+        ##############
+        # Send Widgets
+        ##############
+        # Send Outer Frame
+        self.send_outer_frame = tk.Frame(root, relief=tk.SUNKEN, borderwidth=0, bg='#414850')
+        self.send_outer_frame.pack()
+        self.send_outer_frame.pack_forget()
+
+        # Send Label Frame 
+        self.send_frame = tk.Frame(self.send_outer_frame, bg='#414850')
+        self.send_frame.pack(side='top', pady=5)
+       
+        # Send Label
+        self.send_label = tk.Label(self.send_frame, bg='#414850', fg='white', text='S e n d   B i t c o i n', font=('Segoe', 12, 'bold'))
+        self.send_label.pack(side='left', ) 
+        
+        # Send Login
+        self.send_log_frame = tk.Frame(self.send_outer_frame, bg='#414850')
+        self.send_log_frame.pack(pady=1, padx=3, fill=tk.X)
+        
+        # Send General
+        self.recipient_label = tk.Label(self.send_outer_frame, text='Enter Details:', anchor="w", bg='#414850', fg='white', font=("Arial", 9))
+        self.recipient_label.pack(fill='x', padx=6, pady=2)
+        self.send_process_frame = tk.Frame(self.send_outer_frame, bg='#414850')
+        self.send_process_frame.pack(padx=3, fill=tk.X)
+        self.recipient_address_ent = tk.Entry(self.send_process_frame, bd=2.5, state='normal', justify='center', font=('Arial', 9), width=16)
+        self.recipient_address_ent.insert(0, self.recipient_address_text)        
+        self.recipient_address_ent.pack(side=tk.LEFT, padx=(6,0), pady=(0, 1), fill=tk.BOTH)
+        self.recipient_address_ent.bind('<FocusIn>', self.on_entry_send_focus)
+        self.send_amount_ent = tk.Entry(self.send_process_frame, bd=2.5, state='normal', justify='center', font=('Arial', 9), width=18)
+        self.send_amount_ent.insert(0, self.recipient_amount_text)        
+        self.send_amount_ent.pack(side=tk.LEFT, pady=(0, 1), fill=tk.BOTH)
+        self.send_amount_ent.bind('<FocusIn>', self.on_entry_send_focus)
+        self.send_message_ent = tk.Entry(self.send_process_frame, bd=2.5, state='normal', justify='center', font=('Arial', 9), width=32)
+        self.send_message_ent.insert(0, self.recipient_message_text)        
+        self.send_message_ent.pack(side=tk.LEFT, pady=(0, 1), fill=tk.BOTH)
+        self.send_message_ent.bind('<FocusIn>', self.on_entry_send_focus)
+        self.send_btn = tk.Button(self.send_process_frame, command=self.send_clicked, bd=2.5, state='normal', text='S e n d', bg='#4f697f', fg='#f7931a', font=('Arial', 9, 'bold'), width=8)
+        self.send_btn.pack(side=tk.LEFT, padx=(0, 6), fill=tk.Y)        
+        
+        # Send Textbox
+        self.send_results_label = tk.Label(self.send_outer_frame, text='Results / Notifications', anchor="w", bg='#414850', fg='white', font=("Arial", 9))
+        self.send_results_label.pack(fill='x', padx=6, pady=8)
+        self.send_textbox_frame = tk.Frame(self.send_outer_frame)
+        self.send_textbox_frame.pack()         
+        self.send_textbox = scrolledtext.ScrolledText(self.send_textbox_frame, bg='#414850', fg="white", font=("Segoe", 11), wrap=tk.WORD, width=68, height=11)
+        self.send_textbox.tag_configure('center_tag', justify='center')
+        self.send_textbox.tag_add('center_tag', '1.0', '1.end')
+        self.send_textbox.insert('end', self.send_textbox_text)
+        self.send_textbox.pack(pady=(13), padx=(8), anchor='w')
+        self.nov_logo = tk.PhotoImage(file='nov_logo.png')
+        self.send_textbox.image_create('1.0', image=self.nov_logo)
+        self.send_textbox.image = self.nov_logo  
         
         
     ################
@@ -207,8 +272,10 @@ class Home():
         self.home_outer_frame.pack_forget()
         self.explorer_outer_frame.pack_forget()
         self.create_address_outer_frame.pack_forget()
+        self.send_outer_frame.pack_forget()
         self.main_explorer_button.config(state='normal')
         self.main_gen_address_button.config(state='normal')
+        self.main_send_button.config(state='normal')
         self.main_home_button.config(state='disabled')
         self.home_outer_frame.pack()
         self.create_address_key_text.delete('1.0', 'end')
@@ -217,12 +284,13 @@ class Home():
     def main_explorer_click(self):
         self.home_outer_frame.pack_forget()
         self.main_explorer_button.config(state='disabled')
-        self.main_gen_address_button.config(state='disabled')        
+        self.main_gen_address_button.config(state='disabled') 
+        self.main_send_button.config(state='disabled')       
         self.explorer_outer_frame.pack()
         self.main_home_button.config(state='normal')
         self.main_home_button.config(fg='#f7931a')
         self.display_result(text=
-            'False Positive and False Negative Alert\n\n'
+            '🚨 False Positive and False Negative Alert\n\n'
             '💡 Steps to check address balance and transaction details to prevent false positives and false negatives:\n\n'
             '1. In bitcoin.conf, add this: assumevalid=0. (This forces the node to verify every signature from the genesis block forward.)\n'
             '2. Start bitcoind in the Linux terminal.\n'
@@ -237,9 +305,20 @@ class Home():
         self.home_outer_frame.pack_forget()
         self.main_explorer_button.config(state='disabled')
         self.main_gen_address_button.config(state='disabled')        
+        self.main_send_button.config(state='disabled')
         self.create_address_outer_frame.pack()
         self.main_home_button.config(state='normal')
         self.main_home_button.config(fg='#f7931a')
+
+
+    def main_send_click(self):
+        self.home_outer_frame.pack_forget()
+        self.main_explorer_button.config(state='disabled')
+        self.main_gen_address_button.config(state='disabled')
+        self.main_send_button.config(state='disabled')        
+        self.send_outer_frame.pack()
+        self.main_home_button.config(state='normal')
+        self.main_home_button.config(fg='#f7931a')        
     
 
     ####################
@@ -365,8 +444,8 @@ class Home():
             self.rpc_auth_header
         )
 
-        if not result_blockchain_info.get("success"):
-            self.display_result(f'❌ Check Bitcoin Node connection.')
+        if not result_blockchain_info.get('success'):
+            self.display_result('❎ Check Bitcoin Node connection.')
             self.not_sync_helper()
             return
 
@@ -503,8 +582,7 @@ class Home():
                 self.root.after(0, self.display_result, full_output)
 
             else:
-                error_msg = result_balance_transactions['data'] or 'Unknown error'
-                self.root.after(0, self.display_result, f'\nFailed to scan address: {error_msg}. Please try again.')
+                self.root.after(0, self.display_result, f'\nFailed to scan address. Please try again.')
 
         except Exception as e:
             gen_error_msg = f'Error: {e}'
@@ -661,7 +739,122 @@ class Home():
     def clear_address_text(self):
         self.create_address_key_text.delete('1.0', 'end')  
    
+
+    ################    
+    # Send Functions
+    ################
+    def on_entry_send_focus(self, event):
+        widget = event.widget
+
+        field_map = {
+            self.recipient_address_ent: (self.recipient_address_text, self.send_amount_ent, self.recipient_amount_text,
+                                    self.send_message_ent, self.recipient_message_text),
+            self.send_amount_ent: (self.recipient_amount_text, self.recipient_address_ent, self.recipient_address_text,
+                                self.send_message_ent, self.recipient_message_text),
+            self.send_message_ent: (self.recipient_message_text, self.recipient_address_ent, self.recipient_address_text,
+                                    self.send_amount_ent, self.recipient_amount_text),
+        }
+
+        if widget not in field_map:
+            return
+
+        placeholder = field_map[widget][0]
+
+        if widget.get() == placeholder:
+            widget.delete(0, 'end')
+
+        for i in range(1, len(field_map[widget]), 2):
+            sibling = field_map[widget][i]
+            sibling_placeholder = field_map[widget][i + 1]
+            if sibling.get() == '' or sibling.get() == sibling_placeholder:
+                sibling.delete(0, 'end')
+                sibling.insert(0, sibling_placeholder)
+
+
+    def clear_and_reset_boxes(self):
+        self.recipient_address_ent.config(state='normal')
+        self.send_amount_ent.config(state='normal')
+        self.send_message_ent.config(state='normal')
         
+        self.recipient_address_ent.delete(0, tk.END)
+        self.send_amount_ent.delete(0, tk.END)
+        self.send_message_ent.delete(0, tk.END)
+        
+        self.recipient_address_ent.insert(0, self.recipient_address_text)
+        self.send_amount_ent.insert(0, self.recipient_amount_text)
+        self.send_message_ent.insert(0, self.recipient_message_text) 
+
+        self.send_textbox.delete(1.0, tk.END)       
+        
+
+    def display_send_result(self, text):
+        self.send_textbox.config(state='normal')
+        self.send_textbox.delete(1.0, tk.END)        
+        self.nov_logo = tk.PhotoImage(file='nov_logo.png')
+        self.send_textbox.image_create('end', image=self.nov_logo)
+        self.send_textbox.image = self.nov_logo
+        self.send_textbox.insert(tk.END, text)
+        self.send_textbox.see('1.0')
+
+
+    def send_clicked(self):
+        address_result = ''
+        amount_result = ''
+        message_result = ''
+        has_error = False
+
+        # Address
+        recipient_addr = self.recipient_address_ent.get().strip()
+        val_result = rpc_calls.validate_address(
+            self.rpc_host,
+            self.rpc_port,
+            self.rpc_auth_header,
+            recipient_addr
+        )
+
+        if val_result['success']:
+            address_result = '✅ Recipient address validated successfully.\n\n'
+        else:
+            address_result = '❎ Recipient address validation error: enter a correct address.\n\n'
+            has_error = True
+
+        # 2. Amount
+        send_amount = self.send_amount_ent.get().strip()
+        isValid = cleaner.is_btc_amount_valid(send_amount)
+
+        if isValid:
+            amount_result = '✅ Amount validated successfully.\n\n'
+        else:
+            amount_result = '❎ Amount validation error: enter a correct amount value (e.g., 0.09928340)\n\n'
+            has_error = True
+
+        # 3. Message
+        send_message = self.send_message_ent.get().strip()
+        isValid = cleaner.is_op_return_message_valid(send_message)
+
+        if isValid:
+            message_result = '✅ Message validated successfully.\n\n'
+        else:
+            message_result = '❎ Message validation error: enter a correct text message\n\n'
+            has_error = True
+
+        final_text = f'{address_result}{amount_result}{message_result}'
+
+        if has_error:
+            self.clear_and_reset_boxes()
+            self.display_send_result(final_text)            
+        else:
+            success_msg = '✅ Validation successful.\n\n🚨 I’m off to build the hardware needed to complete the sending process.'
+            self.display_send_result(success_msg)
+            self.recipient_address_ent.delete(0, tk.END)
+            self.send_amount_ent.delete(0, tk.END)
+            self.send_message_ent.delete(0, tk.END)
+            self.recipient_address_ent.delete(0, tk.END)
+            self.send_amount_ent.delete(0, tk.END)
+            self.send_message_ent.delete(0, tk.END)
+            self.send_btn.config(state='disabled')
+            
+
     ################
     # Reset Function
     ################
@@ -675,9 +868,14 @@ class Home():
     def on_close(self):
         self.explorer_log_user = None 
         self.explorer_log_pass = None
-        self.explorer_check_address_ent = None        
+        self.explorer_check_address_ent = None
         self.rpc_username = None
         self.rpc_auth_header = None
+        self.recipient_address_ent = None
+        self.send_amount_ent = None
+        self.send_message_ent = None
+        self.content_key_address = None
+        self.create_address_key_text = None
         self.root.destroy()
         
 
