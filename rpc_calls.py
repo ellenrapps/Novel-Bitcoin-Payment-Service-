@@ -9,7 +9,6 @@ from typing import Any, Dict, Optional, List
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-
 def call_rpc(
     host: str,
     port: int,
