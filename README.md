@@ -11,4 +11,4 @@ Self-Hosted Bitcoin Block Explorer: Monitor balances and transaction history loc
 
 Platform & Script Compatibility: Built specifically for Linux platforms with initial support for Bitcoin Testnet4 Taproot Key Path addresses.
 
-Project Status: Under Active Development. Sending Bitcoin and checking messages are not yet enabled. More features, like inheritance and enhanced security, are coming soon.
+Project Status: Under Active Development. Checking messages is not yet available. Additional features, such as inheritance and enhanced security, are coming soon. I am developing a hardware prototype to secure Bitcoin transaction signing via Partially Signed Bitcoin Transactions (PSBTs).
