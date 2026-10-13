@@ -12,4 +12,10 @@ Self-Hosted Bitcoin Block Explorer: Monitor balances and transaction history loc
 
 Platform & Script Compatibility: Built specifically for Linux platforms with initial support for Bitcoin Testnet4 Taproot Key Path addresses.
 
-Project Status: Under Active Development. Checking messages is not yet available. Additional features, such as inheritance and enhanced security, are coming soon. I am developing a hardware prototype to secure Bitcoin transaction signing via Partially Signed Bitcoin Transactions (PSBTs).
+Project Status: Under Active Development. 
+
+Note on External Hardware: The sole purpose of this external hardware is to secure the single most critical element of Bitcoin: the private key. Key features of a secure hardware device include no internet, no Bluetooth, and no other wireless connectivity capabilities.
+
+Another critical security aspect to consider is the safety of the computer running the Novel Bitcoin Payment Service app and the Bitcoin Core node. One option is to use a dedicated computer that runs only the app, the node, and the external hardware.
+
+Connecting the external hardware to the dedicated computer via cable is a viable solution.
