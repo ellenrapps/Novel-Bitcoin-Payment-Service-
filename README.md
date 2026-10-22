@@ -1,6 +1,7 @@
 
 https://github.com/user-attachments/assets/29b4a131-85d5-4b50-893a-4e138a9d1c3e
 
+Note on Security: I will not be releasing/selling dedicated hardware for this app. However, I will be releasing the full source code soon. Users are responsible for acquiring their own external hardware. "Hardware" in this context refers to any offline, non-wireless device that is widely available on the market, trusted, and verified by the user.
 
 Novel Bitcoin Payment Service puts true financial sovereignty back in your hands. Run your own Bitcoin payment infrastructure without relying on centralized intermediaries.
 
@@ -14,8 +15,3 @@ Platform & Script Compatibility: Built specifically for Linux platforms with ini
 
 Project Status: Under Active Development. 
 
-Note on External Hardware: The sole purpose of this external hardware is to secure the single most critical element of Bitcoin: the private key. Key features of a secure hardware device include no internet, no Bluetooth, and no other wireless connectivity capabilities.
-
-Another critical security aspect to consider is the safety of the computer running the Novel Bitcoin Payment Service app and the Bitcoin Core node. One option is to use a dedicated computer that runs only the app, the node, and the external hardware.
-
-Connecting the external hardware to the dedicated computer via cable is a viable solution.
