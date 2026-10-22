@@ -22,7 +22,7 @@ class Home():
         self.recipient_address_text = 'Recipient Address'
         self.recipient_amount_text = 'Amount to Recipient' 
         self.recipient_message_text = 'Message to Recipient (Optional)'
-        self.send_textbox_text = "💡 Steps to Send Bitcoin\n\nNote: I'm in the process of developing a hardware prototype.\n\nI. Prerequisites:\n1. Ensure your computer is connected to the internet. This is only for validating recipient details. Signing will be done offline via external hardware.\n\n2. Open the Block Explorer Window.\n\n3. In the Block Explorer Window, log in with your node username and password. Authentication is handled via rpcauth.\n\n4. While still in the Block Explorer Window, click “Check Node Sync Status”.\n\n5. If the node is fully synced, click the “Send Bitcoin” button.\n\nII. Send Inputs Validation: Fill in all fields with the correct values, then click the “SEND” button."
+        self.send_textbox_text = "💡 Steps to Send Bitcoin\n\nI. Prerequisites:\n1. Ensure your computer is connected to the internet. This is only for validating recipient details. Signing will be done offline via external hardware.\n\n2. Open the Block Explorer Window.\n\n3. In the Block Explorer Window, log in with your node username and password. Authentication is handled via rpcauth.\n\n4. While still in the Block Explorer Window, click “Check Node Sync Status”.\n\n5. If the node is fully synced, click the “Send Bitcoin” button.\n\nII. Send Inputs Validation: Fill in all fields with the correct values, then click the “SEND” button."
         self.rpc_host = '127.0.0.1'
         self.rpc_port = 48332
         self.explorer_log_user = None 
@@ -844,7 +844,7 @@ class Home():
             self.clear_and_reset_boxes()
             self.display_send_result(final_text)            
         else:
-            success_msg = '✅ Validation successful.\n\n🚨 I’m off to build the hardware needed to complete the sending process.'
+            success_msg = '✅ Validation successful.'
             self.display_send_result(success_msg)
             self.recipient_address_ent.delete(0, tk.END)
             self.send_amount_ent.delete(0, tk.END)
